@@ -1,0 +1,51 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+option csharp_namespace = "Metamoto.Services";
+
+import "metamoto/messages/ground_truth.proto";
+import "metamoto/messages/data_bus_message.proto";
+import "metamoto/types/ego_vehicle.proto";
+import "metamoto/types/enumerations.proto";
+
+service Cosimulation {
+  rpc Initialize (CosimulationInitializeRequest) returns (CosimulationInitializeReply) {}
+  rpc Update (CosimulationUpdateRequest) returns (CosimulationUpdateReply) {}
+  rpc Read (CosimulationReadRequest) returns (CosimulationReadReply) {}
+  rpc Close (CosimulationCloseRequest) returns (CosimulationCloseReply) {}
+}
+
+message CosimulationInitializeRequest {
+  metamoto.messages.GroundTruth ground_truth = 1;
+}
+
+message CosimulationInitializeReply {
+  repeated metamoto.types.EgoVehicle ego_vehicles = 2;
+}
+
+message CosimulationUpdateRequest {
+  double time = 1;
+  metamoto.messages.GroundTruth ground_truth = 2;
+}
+
+message CosimulationUpdateReply {
+}
+
+message CosimulationReadRequest {
+  string ego_vehicle_id = 1;
+  string topic = 2;  
+}
+
+message CosimulationReadReply {
+  metamoto.messages.DataBusMessage message = 1;
+}
+
+message CosimulationCloseRequest {
+  metamoto.types.Action action = 1;
+  string description = 2;   
+}
+
+message CosimulationCloseReply {
+}
+

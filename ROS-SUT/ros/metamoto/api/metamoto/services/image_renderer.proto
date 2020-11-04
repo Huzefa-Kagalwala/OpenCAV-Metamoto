@@ -1,0 +1,40 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+option csharp_namespace = "Metamoto.Services";
+
+import "metamoto/types/vector3.proto";
+import "metamoto/types/image.proto";
+
+// The image renderer service provides the ability to acquire images from the simulator's
+// rendering engine. Use SetCamera at initialization to create and configure a new camera.
+// Then during each update, call GetImage using the camera ID returned by SetCamera to
+// retrieve the latest image.
+service ImageRenderer {
+  rpc SetCamera (ImageRendererSetCameraRequest) returns (ImageRendererSetCameraReply) {}
+  rpc GetImage (ImageRendererGetImageRequest) returns (ImageRendererGetImageReply) {}
+}
+
+message ImageRendererSetCameraRequest {
+  metamoto.types.Vector3 position = 1;
+  metamoto.types.Vector3 rotation = 2;
+  uint32 frame_width = 3;
+  uint32 frame_height = 4;
+  double frame_rate = 5;
+  double vfov = 6;
+  bool hdr = 7;
+}
+
+message ImageRendererSetCameraReply {
+  string id = 1;
+}
+
+message ImageRendererGetImageRequest {
+  string id = 1;
+}
+
+message ImageRendererGetImageReply {
+  double time = 1;
+  metamoto.types.Image image = 2;
+}

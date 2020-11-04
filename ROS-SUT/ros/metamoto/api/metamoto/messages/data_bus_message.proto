@@ -1,0 +1,61 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "google/protobuf/any.proto";
+import "metamoto/messages/vehicle_state.proto";
+import "metamoto/messages/vehicle_controls.proto";
+import "metamoto/messages/camera.proto";
+import "metamoto/messages/lidar.proto";
+import "metamoto/messages/radar.proto";
+import "metamoto/messages/gps.proto";
+import "metamoto/messages/imu.proto";
+import "metamoto/messages/ground_truth.proto";
+import "metamoto/messages/localizer.proto";
+import "metamoto/messages/v2x.proto";
+import "metamoto/messages/perception.proto";
+import "metamoto/messages/event.proto";
+
+// Data bus message header
+message Header {
+  // Time when message was published in seconds since simulation start.
+  double time = 1;
+}
+
+// Data bus message
+message DataBusMessage {
+  Header header = 1;
+
+  oneof data_oneof {
+    VehicleState vehicle_state = 2;
+
+    VehicleControls vehicle_controls = 3;
+
+    Camera camera = 4;
+
+    Lidar lidar = 5;
+
+    Radar radar = 6;
+
+    GPS gps = 7;
+
+    IMU imu = 8;
+
+    Localizer localizer = 9;
+	
+    V2X v2x = 10;
+
+    Event event = 11;
+
+    Perception perception = 12;
+
+    GroundTruth ground_truth = 30;
+
+
+    // This field for user-defined messages. This is the proto3 equivalent of proto2 extensions.
+    google.protobuf.Any other = 100;
+  }
+}
+

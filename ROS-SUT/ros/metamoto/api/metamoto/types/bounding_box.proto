@@ -1,0 +1,15 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/vector3.proto";
+import "metamoto/types/quaternion.proto";
+
+message BoundingBox {
+  Vector3 center = 1;
+  Vector3 extents = 2; 
+  Quaternion orientation = 3;
+  string color = 6; // #HEX value or color name
+}

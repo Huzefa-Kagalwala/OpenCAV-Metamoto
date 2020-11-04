@@ -1,0 +1,60 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+option csharp_namespace = "Metamoto.Services";
+
+import "metamoto/messages/ground_truth.proto";
+import "metamoto/types/scenario.proto";
+import "metamoto/types/waypoint.proto";
+
+service Scenario {
+  // Intended to be called from Controller or Sensor Setup in order to overwrite scenario fields prior to initialization.
+  rpc Setup (ScenarioSetupRequest) returns (ScenarioSetupReply) {}
+  rpc Update (ScenarioUpdateRequest) returns (ScenarioUpdateReply) {}
+  rpc GetVehicleWaypoints (ScenarioGetVehicleWaypointsRequest) returns (ScenarioGetVehicleWaypointsReply) {}
+  rpc SetVehicleWaypoints (ScenarioSetVehicleWaypointsRequest) returns (ScenarioSetVehicleWaypointsReply) {}
+  rpc SetDriverModel (ScenarioSetDriverModelRequest) returns (ScenarioSetDriverModelReply) {}
+}
+
+message ScenarioSetupRequest {
+  metamoto.types.Scenario scenario = 1;  // Overwrites existing scenario fields. Currently supported: ego_vehicles, environment, traffic, pedestrians 
+}
+
+message ScenarioSetupReply {
+}
+
+message ScenarioUpdateRequest {
+  metamoto.messages.GroundTruth ground_truth = 1;
+}
+
+message ScenarioUpdateReply {
+}
+
+message ScenarioGetVehicleWaypointsRequest {
+  string vehicle_id = 1;
+  uint32 max_number = 2;	  // 0 for all available.
+  float max_distance = 3;   // Returns only waypoints within max_distance from current position. 0 for all available.
+  float max_time = 4;       // Returns only waypoints to be reached within max_time seconds from now. 0 for all available.
+}
+
+message ScenarioGetVehicleWaypointsReply {
+  repeated metamoto.types.Waypoint waypoints = 1;
+}
+
+message ScenarioSetVehicleWaypointsRequest {
+  string vehicle_id = 1;
+  repeated metamoto.types.Waypoint waypoints = 2;
+  bool append = 3;  // false clears all existing waypoints.
+}
+
+message ScenarioSetVehicleWaypointsReply {
+}
+
+message ScenarioSetDriverModelRequest {
+  string vehicle_id = 1;
+  metamoto.types.DriverModel driver_model = 2;
+}
+
+message ScenarioSetDriverModelReply {
+}

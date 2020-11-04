@@ -1,0 +1,29 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+
+message TestSuite {
+  string id = 1;
+  string name = 2;
+
+  enum ScheduleType {
+    UNKNOWN = 0;
+    OTHER = 1;
+    RUN_ONCE = 2;
+    DAILY = 3;
+    WEEKLY = 4;
+    DISABLE = 5;
+  }
+  ScheduleType schedule = 3;
+
+  string start_time = 4;
+  string next_run_time = 5;
+
+  repeated string test_vector_ids = 6;
+
+  // Range: 1 - 5. Higher values indicate a higher priority.
+  int32 priority = 7;
+}

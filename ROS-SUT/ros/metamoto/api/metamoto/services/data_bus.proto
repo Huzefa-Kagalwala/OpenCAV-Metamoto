@@ -1,0 +1,114 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+
+import "metamoto/messages/data_bus_message.proto";
+import "metamoto/types/normal_distribution.proto";
+
+option java_multiple_files = true;
+option java_package = "com.metamoto.services";
+
+service DataBus {
+  // Declares the intention to write data to a topic, must be called once before any Write.
+  rpc Publish (DataBusPublishRequest) returns (DataBusPublishReply) {}
+
+  // Declares the intention to read data from a topic, must be called once before any Read.
+  rpc Subscribe (DataBusSubscribeRequest) returns (DataBusSubscribeReply) {}
+
+  // Write a data message to a topic.
+  rpc Write (DataBusWriteRequest) returns (DataBusWriteReply) {}
+
+  // Read one data message from a topic.
+  rpc Read (DataBusReadRequest) returns (DataBusReadReply) {}
+
+  // Read all messages from a topic.
+  rpc ReadAll (DataBusReadAllRequest) returns (DataBusReadAllReply) {}
+
+  // Read all messages from a topic, returning the last one.
+  rpc ReadLast (DataBusReadLastRequest) returns (DataBusReadLastReply) {}
+}
+
+message DataBusPublishRequest {
+  string topic = 1;
+  string writer_name = 2;
+
+  metamoto.types.NormalDistribution latency = 3;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 4;
+}
+
+message DataBusPublishReply {
+}
+
+message DataBusSubscribeRequest {
+  string topic = 1;
+  string reader_name = 2;
+
+  metamoto.types.NormalDistribution latency = 3;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 4;
+}
+
+message DataBusSubscribeReply {
+}
+
+message DataBusWriteRequest {
+  string topic = 1;
+  string writer_name = 2;
+
+  metamoto.messages.DataBusMessage message = 3;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 4;
+}
+
+message DataBusWriteReply {
+}
+
+message DataBusReadRequest {
+  string topic = 1;
+  string reader_name = 2;
+
+  // This is the latest message time that should be read. Use negative value for no time limit.
+  double time = 3;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 4;
+}
+
+message DataBusReadReply {
+  metamoto.messages.DataBusMessage message = 1;
+}
+
+message DataBusReadAllRequest {
+  string topic = 1;
+  string reader_name = 2;
+
+  // This is the latest message time that should be read. Use negative value for no time limit.
+  double time = 3;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 4;
+}
+
+message DataBusReadAllReply {
+  repeated metamoto.messages.DataBusMessage messages = 1;
+}
+
+message DataBusReadLastRequest {
+  string topic = 1;
+  string reader_name = 2;
+
+  // This is the latest message time that should be read. Use negative value for no time limit.
+  double time = 3;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 4;
+}
+
+message DataBusReadLastReply {
+  metamoto.messages.DataBusMessage message = 1;
+}

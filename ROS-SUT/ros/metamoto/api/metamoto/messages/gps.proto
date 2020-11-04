@@ -1,0 +1,12 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/geo_coordinates.proto";
+
+// Data bus message published by GPS sensors.
+message GPS {
+  metamoto.types.GeoCoordinates coordinate = 1;
+}

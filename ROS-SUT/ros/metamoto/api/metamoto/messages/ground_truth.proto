@@ -1,0 +1,29 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/environment.proto";
+import "metamoto/types/pedestrian.proto";
+import "metamoto/types/traffic_sign.proto";
+import "metamoto/types/traffic_light.proto";
+import "metamoto/types/vehicle.proto";
+
+// Data bus message published by the simulator holding ground truth data. 
+// The positions reported for objects are at the center of their bounding box.
+message GroundTruth {
+  metamoto.types.Environment environment = 1;
+  
+  // Deprecated. Use ego_vehicles field instead.
+  metamoto.types.Vehicle ego_vehicle = 2;
+  repeated metamoto.types.Vehicle vehicles = 3;
+  repeated metamoto.types.Pedestrian pedestrians = 4;
+  repeated metamoto.types.TrafficLight traffic_lights = 5;
+  repeated metamoto.types.TrafficSign traffic_signs = 6;
+  
+  // Contains ground truth for each ego vehicle. When a scenario includes multiple ego vehicles, 
+  // use the ID sent to the SUT in initialize to find the associated ego vehicle.
+  repeated metamoto.types.Vehicle ego_vehicles = 7;
+}
+

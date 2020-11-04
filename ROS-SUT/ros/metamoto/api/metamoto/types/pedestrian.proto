@@ -1,0 +1,35 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/acceleration.proto";
+import "metamoto/types/pose.proto";
+import "metamoto/types/shape.proto";
+import "metamoto/types/velocity.proto";
+
+// Represents a pedestrian and holds ground truth information.
+message Pedestrian {
+  // Object ID of the pedestrian.
+  string id = 1;
+  
+  // Position and orientation in world coordinates.
+  Pose pose = 2;
+  Velocity velocity = 3;
+  Acceleration acceleration = 4;
+  
+  // Shape containing the pedestrian.
+  Shape shape = 5;  
+  
+  enum Type {
+    UNKNOWN = 0;
+    OTHER = 1;
+    ADULT = 2;
+    CHILD = 3;
+    ANIMAL = 4;
+    RUNNER = 5;
+  }
+  Type type = 6;
+}
+

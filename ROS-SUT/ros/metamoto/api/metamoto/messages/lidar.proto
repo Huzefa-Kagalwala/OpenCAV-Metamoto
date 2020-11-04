@@ -1,0 +1,22 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/laser_return_group.proto";
+
+// Data bus message published by lidars holding one or more LaserReturnGroup messages.
+// The time in the data bus message Header is the time of the first return.
+// Only one of the 'groups' or 'velodyne_pcap' fields are populated.
+message Lidar {
+  // Time increment between returns
+  double time_increment = 1;
+  
+  // The return groups. 
+  repeated metamoto.types.LaserReturnGroup groups = 2;
+  
+  // Velodyne packet capture output.
+  bytes velodyne_pcap = 3;
+}
+

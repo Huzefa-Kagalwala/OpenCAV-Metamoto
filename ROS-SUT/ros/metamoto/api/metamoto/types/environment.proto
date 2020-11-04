@@ -1,0 +1,98 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/pose.proto";
+import "metamoto/types/vector3.proto";
+
+message Environment {
+  message Weather {
+    // All these are 0-1 intensities, default 0.
+    float clouds = 1;
+    float overcast = 2;
+    float wind = 3;
+    float rain = 4;
+    float snow = 5;
+    float hail = 6;
+    float fog = 7;
+    float temperature = 8;  // (Celsius)
+  }
+  Weather weather = 1;
+
+  // Decimal hours between 0 and 24.
+  float time_of_day = 2;
+
+  message RoadConditions {
+    // Blank means the entire RoadNetwork.
+    string road_id = 1;
+    // lane_index at 0 means the whole road width.
+    int32 lane_index = 2;
+    // Both at 0 means the whole road length.
+    float s_min = 3;
+    float s_max = 4;
+
+    // All of the following parameters are 0-1.
+    float wetness = 5;                // default: 0.2
+    float puddles = 6;                // default: 0
+
+    // These settings are overridden by the more granular ones below.
+    float surface_weathering = 11;    // default: 0.1
+    float surface_features = 12;      // default: 0.1
+
+    // surface weathering:
+    float markings_deterioration = 7; // default: 0.1
+    float cracks = 8;                 // default: 0.1
+    float stains = 13;                // default: 0.1
+
+    // surface features:
+    float tar_snakes = 9;             // default: 0.1
+    float pot_holes = 10;             // default: 0.1
+    float manholes = 14;              // default: 0.1
+    float drains = 15;                // default: 0.1
+    float patches = 16;               // default: 0.1
+  }
+  repeated RoadConditions road_conditions = 3;
+    
+  message Lighting {
+    // 0-1 percentage of building lights that are turned on.
+    float buildings = 1;
+  }
+  Lighting lighting = 4;
+
+  message EnvironmentObject {
+    // Internal name of the object.
+    string name = 1;
+    
+    // Display name for the object instance.
+    string display_name = 2;
+
+    // Position and orientation in world coordinates.
+    Pose pose = 3;
+    
+    // Scale if different from default.
+    Vector3 scale = 4;
+
+    // Limits to how much an object can be scaled in a direction.
+    Vector3 scale_limits = 5;
+    
+    // How much this object affects driving speed (0-1; 1 means the lane is blocked).
+    float speed_reduction = 6;
+  }
+  repeated EnvironmentObject environment_objects = 5;
+}
+
+// environment object library
+message EnvironmentObjectLibrary {
+  message EnvironmentObjectTemplate {
+    string name = 1;
+    string prefab = 2;
+    string description = 3;
+    string bundle = 4;
+    Vector3 scale_limits = 5;
+    string image = 6;
+    float speed_reduction = 7;
+  }
+  repeated EnvironmentObjectTemplate objects = 1;
+}

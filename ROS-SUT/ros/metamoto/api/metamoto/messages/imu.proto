@@ -1,0 +1,14 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/vector3.proto";
+
+// Data bus message published by IMU sensors.
+message IMU {
+  metamoto.types.Vector3 angular_velocity = 1;
+  metamoto.types.Vector3 linear_acceleration = 2;
+}
+

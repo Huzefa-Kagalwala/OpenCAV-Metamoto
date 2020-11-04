@@ -1,0 +1,19 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/pedestrian.proto";
+
+// Pedestrian library
+message PedestrianLibrary { 
+  message PedestrianTemplate {
+    string name = 1;
+    repeated string other_names = 2;
+    string prefab = 3;
+    Pedestrian.Type type = 4;
+    float weight = 5;
+  }  
+  repeated PedestrianTemplate pedestrians = 1;
+}

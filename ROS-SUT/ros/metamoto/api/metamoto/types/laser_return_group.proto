@@ -1,0 +1,20 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/laser_return.proto";
+import "metamoto/types/pose.proto";
+
+// Holds the returns for the simultaneous firing of multiple lidar lasers
+message LaserReturnGroup {
+  // Position and orientation of the sensor in world (ground truth).
+  Pose pose = 1;      
+  
+  // Azimuth angle of this firing in degrees
+  float azimuth_angle = 2;
+  
+  // The laser returns
+  repeated LaserReturn returns = 3;
+}

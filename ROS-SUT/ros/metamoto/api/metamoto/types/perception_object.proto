@@ -1,0 +1,90 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/enumerations.proto";
+import "metamoto/types/pose.proto";
+import "metamoto/types/shape.proto";
+import "metamoto/types/velocity.proto";
+import "metamoto/types/acceleration.proto";
+import "metamoto/types/vehicle.proto";
+import "metamoto/types/signal_configuration.proto";
+
+// Holds the return information for a single obstacle tracked by the perception sensor.
+// The location and speed of the obstacle are outputted in both local and world coordinate systems.
+message PerceptionObject {
+  // The object ID (ground truth).
+  uint32 object_id = 1;
+  
+  // The object type (ground truth).
+  ObjectType object_type = 2;
+  
+  // The shape and size of the bounding box.
+  metamoto.types.Shape shape = 3;
+  
+  // Duration of an obstacle since detection in sec.
+  double tracking_time = 4;
+  
+  // The obstacle information in the world coordinate system.
+  GlobalFrame global_frame = 5;
+  
+  // The obstacle information relative to the sensor frame.
+  LocalFrame local_frame = 6;
+  
+  // Headlight status. Only for vehicles. UNKNOWN if obstructed/not visible.
+  metamoto.types.Vehicle.LightState head_lights = 10;
+  
+  // Reverse light status. Only for vehicles. UNKNOWN if obstructed/not visible.
+  metamoto.types.Vehicle.LightState reverse_lights = 11;
+  
+  // Brake light status. Only for vehicles. UNKNOWN if obstructed/not visible.
+  metamoto.types.Vehicle.LightState brake_lights = 12;
+  
+  // Signal light status. Only for vehicles. UNKNOWN if obstructed/not visible.
+  metamoto.types.Vehicle.SignalLightState signal_lights = 13;
+  
+  // Traffic light status. Only for traffic lights. 
+  // For traffic lights facing towards the sensor, one entry for each on/blinking bulb.
+  // Otherwise, one entry with no type and STATE_UNKNOWN state.
+  repeated TrafficLightBulb traffic_light_bulbs = 14;
+  
+  message TrafficLightBulb {
+    metamoto.types.SignalConfiguration.Signal.BulbType type = 1;
+    metamoto.types.SignalConfiguration.Signal.BulbState state = 2;
+  }
+}
+
+message LocalFrame {
+  // The distance (in meters) of the center of the obstacle to the sensor.
+  float range = 1;
+  
+  // The azimuth angle (in degrees) of the center of the obstacle wrt the sensor forward (clockwise positive). Between -180 and 180 deg.
+  float azimuth_angle = 2;
+  
+  // The elevation angle (in degrees) of the center of the obstacle wrt the sensor forward (up positive). Between -90 and 90 deg.
+  float elevation_angle = 3;
+  
+  // The relative radial speed in m/s (approaching negative, leaving positive).
+  float radial_speed = 4;
+  
+  // The relative cross-radial (tangential) speed in m/s (clockwise positive).
+  float cross_speed = 5;  
+}
+
+message GlobalFrame {
+  // The obstacle position and orientation of the center point in the world coordinate system. 
+  // Only the position part is affected by noises.
+  metamoto.types.Pose pose = 1;
+  
+  // The obstacle velocity in the world coordinate system.
+  // Only the linear part is affected by noises.
+  metamoto.types.Velocity velocity = 2;
+  
+  // The obstacle acceleration in the world coordinate system.
+  // Not affected by noises.
+  metamoto.types.Acceleration acceleration = 3;
+}
+
+

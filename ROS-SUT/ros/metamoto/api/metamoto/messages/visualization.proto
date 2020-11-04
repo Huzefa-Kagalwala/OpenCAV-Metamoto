@@ -1,0 +1,26 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/enumerations.proto";
+import "metamoto/types/bounding_box.proto";
+import "metamoto/types/visual_path.proto";
+
+message VisualizationList {
+  repeated Visualization visual_messages = 1;
+}
+
+message Visualization {
+  double time = 1;
+  metamoto.types.ReferenceFrame frame = 2;
+  oneof path_type {
+    metamoto.types.BoundingBox box = 3;
+    metamoto.types.VisualPath path = 4;
+  }
+  string label = 5; // ignored for path visuals
+  string description = 7;
+  double duration = 8;
+}
+

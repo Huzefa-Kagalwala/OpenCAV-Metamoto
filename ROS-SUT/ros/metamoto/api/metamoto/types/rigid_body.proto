@@ -1,0 +1,47 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/pose.proto";
+import "metamoto/types/velocity.proto";
+import "metamoto/types/vector3.proto";
+import "metamoto/types/enumerations.proto";
+
+// Tire contact information is provided for the points on the terrain under the wheels' center. 
+// When using the vehicle dynamics API, this information can be extracted from the Terrain, 
+// but is provided in the Initialize call and each of the Update requests to avoid performing 
+// a lookup search at each Update call.
+message TireContact {
+  // World position of the tire contact center.
+  metamoto.types.Vector3 center = 1;
+
+  // The normal of the contact center.
+  metamoto.types.Vector3 normal = 2;
+  
+  // The type of the contact surface material.
+  metamoto.types.MaterialType material = 3;
+  
+  // Wetness amount between 0 and 1 (unitless).
+  float wetness = 4;
+  
+  // Puddle amount between 0 and 1 (unitless).
+  float puddle = 5;
+}
+
+message RigidBody {
+  // Position and orientation of the origin of the rigid body in world coordinate system.
+  metamoto.types.Pose pose = 1;
+  
+  // Position and orientation of the wheel center relative to the origin of the rigid body.
+  // Wheels are sorted from front to back and left to right.
+  // For example for 4-wheel vehicles they are sorted as FL, FR, BL, BR.
+  // Rigid bodies may or may not have wheels.
+  repeated metamoto.types.Pose wheels_pose = 2;
+  
+  // Linear and angular velocity of the rigid body (optional).
+  // If the Vehicle Dynamics Co-simulation code does not return this field in the Update call,
+  // Engine will calculate the velocities from the delta pose.
+  metamoto.types.Velocity velocity = 3;
+}

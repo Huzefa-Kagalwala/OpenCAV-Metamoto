@@ -1,0 +1,70 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+
+import "metamoto/types/roads.proto";
+import "metamoto/types/vector3.proto";
+import "metamoto/types/waypoint.proto";
+
+option java_multiple_files = true;
+option java_package = "com.metamoto.services";
+
+service Map {
+  // Returns the road network structure of the current scene. Large response, call only once.
+  rpc GetRoadNetwork (MapGetRoadNetworkRequest) returns (MapGetRoadNetworkReply) {}
+
+  // Converts from world coordinates to road coordinates.
+  rpc ToRoadPoint (MapToRoadPointRequest) returns (MapToRoadPointReply) {}
+
+  // Converts from road coordinates to world coordinates.
+  rpc ToWorldPoint (MapToWorldPointRequest) returns (MapToWorldPointReply) {}
+
+  // Returns the heading unit vector (in world coordinates) at a given RoadPoint.
+  // Returns zero vector if the road point is not found in the road network.
+  rpc GetHeading (MapGetHeadingRequest) returns (MapGetHeadingReply) {}
+
+  // Returns detailed path in world points, with orientations and speeds, between two points.
+  rpc GetPath (MapGetPathRequest) returns (MapGetPathReply) {}
+}
+
+message MapGetRoadNetworkRequest {
+}
+
+message MapGetRoadNetworkReply {
+  metamoto.types.RoadNetwork road_network = 1;
+}
+
+message MapToRoadPointRequest {
+  metamoto.types.Vector3 world_point = 1;
+  float vertical_tolerance = 2;
+}
+
+message MapToRoadPointReply {
+  repeated metamoto.types.RoadPoint road_points = 1;
+}
+
+message MapToWorldPointRequest {
+  metamoto.types.RoadPoint road_point = 1;
+}
+
+message MapToWorldPointReply {
+  metamoto.types.Vector3 world_point = 1;
+}
+
+message MapGetHeadingRequest {
+  metamoto.types.RoadPoint road_point = 1;
+}
+
+message MapGetHeadingReply {
+  metamoto.types.Vector3 heading = 1;
+}
+
+message MapGetPathRequest {
+  metamoto.types.Waypoint from_point = 1;
+  metamoto.types.Waypoint to_point = 2;
+}
+
+message MapGetPathReply {
+  repeated metamoto.types.Waypoint path = 1;
+}

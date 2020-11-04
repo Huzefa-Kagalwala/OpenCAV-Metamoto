@@ -1,0 +1,39 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/range.proto";
+import "metamoto/types/test_result.proto";
+import "metamoto/types/test_vector.proto";
+
+
+message TestJob {
+  string job_id = 1;
+  repeated string sut_job_ids = 2;
+  string test_run_id = 3;
+  string test_case_id = 4;
+  string test_case_name = 5;
+
+  string test_vector_id = 6;
+  string test_vector_name = 7;
+  TestVector.Strategy test_vector_strategy = 8;
+
+  string start_time = 9;
+  string end_time = 10;
+  float compute_time = 11;
+  TestResult.Status status = 12;
+  string result_text = 13;
+  float progress = 14;
+  float duration_objective = 15;
+  float last_job_duration = 16;
+  string log_file = 17;
+  string results_file = 18;
+  float disk_usage = 19;
+  string last_update_time = 20;
+  string sut_log_file = 21;
+
+  // These are the combined scenario and ego_vehicle ranges (with corresponding prefixes).
+  map<string, Parameter> parameters = 100;
+}

@@ -1,0 +1,17 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+option csharp_namespace = "Metamoto.Services";
+
+// System service
+service System {
+  rpc GetResultsSize(SystemGetResultsSizeRequest) returns (SystemGetResultsSizeReply) {}
+}
+
+message SystemGetResultsSizeRequest {
+}
+
+message SystemGetResultsSizeReply {
+  int64 results_size = 1; // bytes
+}

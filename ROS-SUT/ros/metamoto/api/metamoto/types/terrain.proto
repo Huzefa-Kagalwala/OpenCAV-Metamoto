@@ -1,0 +1,32 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/vector3.proto";
+import "metamoto/types/enumerations.proto";
+
+// This provides a detailed terrain information (roads, sidewalks and curbs).
+message Terrain {
+  // The name of the terrain
+  string name = 1;
+  
+  // The vertex positions
+  repeated metamoto.types.Vector3 vertices = 2;
+  
+  // The normals of the mesh (the size of this list is equal to the size of vertices)
+  repeated metamoto.types.Vector3 normals = 3;
+  
+  // Wetness amount for each vertex between 0 and 1 (unitless).
+  repeated float wetnesses = 4;
+  
+  // Puddle amount for each vertex between 0 and 1 (unitless).
+  repeated float puddles = 5;
+  
+  // The list of triangles that contains indices into the vertices list (the size of this list is a multiple of three)
+  repeated int32 triangles = 6;
+  
+  // The type of the surface material of the triangles.
+  repeated metamoto.types.MaterialType materials = 7;
+}

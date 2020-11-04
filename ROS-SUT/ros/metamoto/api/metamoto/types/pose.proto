@@ -1,0 +1,14 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/quaternion.proto";
+import "metamoto/types/vector3.proto";
+
+// Holds position and orientation.
+message Pose {
+  Vector3 position = 1;
+  Quaternion orientation = 2;
+}

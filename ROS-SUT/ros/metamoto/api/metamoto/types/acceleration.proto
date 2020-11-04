@@ -1,0 +1,13 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/vector3.proto";
+
+message Acceleration {
+  Vector3 linear = 1;
+  Vector3 angular = 2;
+}
+
