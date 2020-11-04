@@ -1,0 +1,12 @@
+(cl:in-package delphi_mrr_msgs-msg)
+(cl:export '(HEADER-VAL
+          HEADER
+          CAN_SPEED_FRONT_LEFT_WHEEL-VAL
+          CAN_SPEED_FRONT_LEFT_WHEEL
+          CAN_SPEED_FRONT_RIGHT_WHEEL-VAL
+          CAN_SPEED_FRONT_RIGHT_WHEEL
+          CAN_SPEED_REAR_LEFT_WHEEL-VAL
+          CAN_SPEED_REAR_LEFT_WHEEL
+          CAN_SPEED_REAR_RIGHT_WHEEL-VAL
+          CAN_SPEED_REAR_RIGHT_WHEEL
+))
