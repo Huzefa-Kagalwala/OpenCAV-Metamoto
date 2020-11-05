@@ -1,0 +1,8 @@
+prefix=/metamoto/catkin_ws/devel
+
+Name: mobileye_560_660_msgs
+Description: Description of mobileye_560_660_msgs
+Version: 3.1.0
+Cflags: -I/metamoto/catkin_ws/devel/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime
