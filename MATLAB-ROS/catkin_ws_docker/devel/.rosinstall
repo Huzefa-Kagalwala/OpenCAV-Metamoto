@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /metamoto/catkin_ws/devel/setup.sh
