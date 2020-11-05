@@ -1,0 +1,13 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+message Version {
+  int32 major = 1;
+  int32 minor = 2;
+  int32 patch = 3;
+  string build = 4;
+  string timestamp = 5;
+}

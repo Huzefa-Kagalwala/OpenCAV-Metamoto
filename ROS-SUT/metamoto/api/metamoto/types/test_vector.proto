@@ -1,0 +1,32 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/ego_vehicle.proto";
+import "metamoto/types/range.proto";
+import "metamoto/types/scenario.proto";
+
+
+message TestVector {
+  string id = 1;
+  string name = 2;
+
+  enum Strategy {
+    UNKNOWN = 0;
+    OTHER = 1;
+    SINGLE = 2;
+    EXHAUSTIVE = 3;
+    RANDOM = 4;
+    EDGES = 5;
+  }
+  Strategy strategy = 3;
+  int32 num_tests = 4;
+
+  Scenario scenario = 5;
+  EgoVehicle ego_vehicle = 6;
+
+  // These are the combined scenario and ego_vehicle ranges (with corresponding prefixes).
+  map<string, Parameter> parameters = 100;
+}

@@ -1,0 +1,13 @@
+(cl:defpackage radar_msgs-msg
+  (:use )
+  (:export
+   "<RADARPROCESSED>"
+   "RADARPROCESSED"
+   "<RADARPROCESSEDARRAY>"
+   "RADARPROCESSEDARRAY"
+   "<RADARTRACK>"
+   "RADARTRACK"
+   "<RADARTRACKARRAY>"
+   "RADARTRACKARRAY"
+  ))
+

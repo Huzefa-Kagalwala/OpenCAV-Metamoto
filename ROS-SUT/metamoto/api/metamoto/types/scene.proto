@@ -1,0 +1,35 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+message SceneImport {
+  int32 id = 1;
+
+  enum Status {
+    UNKNOWN = 0;
+    QUEUED = 1;
+    BUILDING = 2;
+    SUCCEEDED = 3;
+    FAILED = 4;
+    CANCELLED = 5;
+  }
+
+  Status status = 2;
+  string status_message = 3;
+  string start_time = 4;
+  string end_time = 5;
+  string started_by = 6;
+  float progress = 7;
+}
+
+message Scene {
+  string id = 1;
+  string name = 2;
+  string display_name = 3;
+  string description = 4;
+  bool ready = 5;
+  repeated SceneImport imports = 6;
+}
+

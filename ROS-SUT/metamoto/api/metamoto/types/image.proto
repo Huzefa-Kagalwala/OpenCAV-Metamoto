@@ -1,0 +1,26 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+// Holds an image.  The format of the image data is described by the
+// encoding field.
+message Image {
+  // Image width in pixels
+  uint32 width = 1;
+  
+  // Image height in pixels
+  uint32 height = 2;
+  
+  // Number of bytes in a row of pixels
+  uint32 step = 3;
+  
+  // Encoding format of the image data
+  string encoding = 4;
+  
+  // Image data
+  bytes data = 5;
+}
+
+

@@ -1,0 +1,30 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "google/protobuf/struct.proto";
+
+
+message NumericRange {
+  double min = 1;
+  double max = 2;
+  double step = 3;
+}
+
+// A Range is a wrapper for a collection of numerical ranges and/or values of any type.
+message Range {
+  // The display name for this parameter.
+  string parameter_name = 1;
+
+  // A set of numerical ranges (for numerical types only), and/or a set of values,
+  // which must all be of the same type (only string/enum, bool, and number are supported).
+  repeated NumericRange numeric_ranges = 2;
+  repeated google.protobuf.Value values = 3;
+}
+
+message Parameter {
+  Range range = 1;
+  Range selected = 2;
+}

@@ -1,0 +1,22 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/enumerations.proto";
+import "metamoto/types/scenario.proto";
+
+message Event {
+  oneof type_oneof {
+    metamoto.types.Event event = 1;
+    metamoto.types.Infraction infraction = 2;
+    metamoto.types.Action reported_action = 3;
+  }
+
+  string primary_id = 4;    // E.g. the subject id of the event/infraction/action.
+  string secondary_id = 5;  // E.g. the object id of the event/infraction/action.
+
+  float value = 6;          // E.g. the infraction value.
+  string description = 7;   // E.g. the action description.
+}

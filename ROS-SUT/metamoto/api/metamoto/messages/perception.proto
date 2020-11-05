@@ -1,0 +1,13 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/perception_object.proto";
+
+// Data bus message published by radars containing a list of detected objects.
+message Perception {
+  // The list of detected objects
+  repeated metamoto.types.PerceptionObject objects = 1;
+}

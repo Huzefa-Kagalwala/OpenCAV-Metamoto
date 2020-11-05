@@ -1,0 +1,315 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "google/protobuf/wrappers.proto";
+import "metamoto/types/vector3.proto";
+import "metamoto/types/geo_coordinates.proto";
+
+// An elevation entry for a road. This matches the OpenDrive elevation spec, and a RepeatedField of
+// them can be considered an OpenDrive ElevationProfile.
+message Elevation {
+	// The starting s-coordinate where this polynomial function applies.
+	float s = 1;
+	
+	// Height is given by the function a + b*ds + c*ds^2 + d*ds^3 where ds is the relative s-coordinate from 
+	// the starting s of this elevation entry.
+	float a = 2;
+	float b = 3;
+	float c = 4;
+	float d = 5;
+	
+	// If this is true, ds should be the relative s from the END of the section instead of from the start.
+	bool reversed = 6;
+}
+
+// A single geometry segment of a Road. This represents the reference line of the road (lane 0),
+// which is the median for a two-way road and is the LEFT border of a one-way road.
+message Geometry {
+  enum Type {
+    UNKNOWN = 0;
+    OTHER = 1;
+    STRAIGHT_LINE = 2;
+    ARC = 3;
+  }
+
+  message Arc {
+    // May be 0 (e.g. for tight turn).
+    float radius = 1;
+
+    // Positive for left, negative for right turn, in degrees.
+    float angle = 2;
+
+    // Center of arc in world space.
+    Vector3 center = 3;
+  }
+
+  Type type = 1;
+
+  // Start point in world coordinates.
+  Vector3 start = 2;
+
+  // Unit vector representing heading of the start of the geometry.
+  Vector3 heading = 3;
+
+  // The road s-coordinate of the start of this geometry.
+  float s = 4;
+
+  float length = 5;
+  Arc arc = 6;
+}
+
+
+// Represents a marking such as lane marking or parking space delimiter. 
+// Does not describe the geometry of the markings but rather the type and location.
+// For regular lanes, assumes this is the *right* side of the lane.
+message Marking {
+  enum Type {
+    TYPE_UNKNOWN = 0;
+    TYPE_OTHER = 1;
+    SOLID = 2;
+    DASH = 3;
+    CURB = 4;             // e.g. to indicate curb colors
+    DOUBLE_SOLID = 5;     // e.g. for median
+    SOLID_RIGHT_DASH = 6; // e.g. for median
+    SOLID_LEFT_DASH = 7;  // e.g. for median
+    PARALLEL_PARKING = 8;
+    PERPENDICULAR_PARKING = 9;
+    ANGLED_PARKING_60 = 10;
+    CROSSWALK = 11;
+	  PARKING = 12; // angle specfied by headingOffset
+  }
+
+  enum Color {
+    COLOR_UNKNOWN = 0;
+    COLOR_OTHER = 1;
+    WHITE = 2;
+    YELLOW = 3;
+    RED = 4;
+    GREEN = 5;
+    BLUE = 6;
+  }
+
+  Type type = 1;
+  Color color =  2;
+
+  // Optional s-coordinate, for marking types that don't span the whole lane section.
+  google.protobuf.FloatValue s = 3;
+
+  // Optional t-coordinate, if omitted, assumes right side of lane in direction of traffic.
+  google.protobuf.FloatValue t = 4;
+  
+  // Offset in degrees from the road's heading. Only valid for Type=PARKING.
+  float heading_offset = 5;
+}
+
+
+// Describes a lane in a LaneSection of a Road.
+message Lane {
+  enum Type {
+    UNKNOWN = 0;
+    OTHER = 1;
+    MEDIAN = 2;
+    CAR_LANE = 3;
+    PARALLEL_PARKING_LANE = 4;
+    BIKE_LANE = 5;
+    SHOULDER = 6;
+    PERPENDICULAR_PARKING_LANE = 7;
+    ANGLED_PARKING_60_LANE = 8;
+    PARKING_LANE = 9;
+  }
+
+  // Lane index is sequential from the median; there is always a 0-lane indicating the median.
+  // Negative for right side of road when facing in increasing s-direction, positive for left side.
+  int32 index = 1;
+
+  // Id provides continuity for a lane when lanes appear or disappear. 
+  // A lane's id is always constant, when index may not be.
+  string id = 2;
+
+  Type type = 3;
+
+  // Initial and final width in meters, assuming linear interpolation between them.
+  // Note that both may be 0 simultaneously.
+  float width0 = 4;
+  float width1 = 5;
+
+  // Initial and final center coordinate in meters from the median, assuming linear interpolation
+  // (negative in negative lane index direction).
+  float center0 = 6;
+  float center1 = 7;
+
+  repeated Marking markings = 8;
+}
+
+
+// Describes the drivable connection between lanes of two Roads in a Junction.
+message LaneLink {
+  int32 from_lane_index = 1;
+  int32 to_lane_index = 2;
+  string from_lane_id = 3;
+  string to_lane_id = 4;
+
+  int32 lane_index = 5;   // DEPRECATED: use lane_id
+  
+  // This is the id of the lane in the connecting road that represents this LaneLink.
+  string lane_id = 6;
+}
+
+
+// Describes a signal such as traffic light or sign.
+message Signal {
+  // "From" and "to" are in arbitrary order, not necessarily mathematical min and max.
+  message LaneValidity {
+    int32 from_lane_index = 1;
+    int32 to_lane_index = 2;
+  }
+
+  enum Type {
+    UNKNOWN = 0;
+    OTHER = 1;
+    LIGHT = 2;
+    LEFT_TURN_LIGHT = 3;
+    RIGHT_TURN_LIGHT = 4;
+    STOP = 5;
+    YIELD = 6;
+    IMPLICIT_YIELD = 7;
+    DISCONTINUITY = 8;   // Vehicle sinks are placed at discontinuities in the road network.
+  }
+
+  string id = 1;
+  Type type = 2;
+
+  // Position along road; if past the ends of the road, will be 0 or s-max.
+  float s = 3;
+
+  LaneValidity lane_validity = 4;
+}
+
+
+// Describes a connection between two Roads in a Junction. The lanes this represents
+// are always in the same direction, so that for two bi-directional roads, two 
+// ConnectingRoads are needed to represent a connection, one in each direction.
+message ConnectingRoad {
+  enum Direction {
+    UNKNOWN = 0;
+    OTHER = 1;
+    STRAIGHT = 2;
+    RIGHT = 3;
+    LEFT = 4;
+    UTURN = 5;
+    SOFT_RIGHT = 6;
+    SOFT_LEFT = 7;
+  }
+
+  // Which junction is this connection in.
+  string in_junction_id = 1;
+
+  Direction type = 2;
+
+  // The lane links are always in the same order as the lanes of this connecting road.
+  repeated LaneLink lane_links = 3;
+}
+
+
+// Describes a section of the Road for which the number of lanes is constant.
+// So if a new lane is added to a road, there will be a section prior to the add,
+// a section for the linear transition where the lane goes from 0 to width1, and
+// a section post-add.
+message LaneSection {
+  // Road s-coordinates marking the start and end of this section.
+  float s0 = 1;
+  float s1 = 2;
+
+  repeated Lane lanes = 3;
+}
+
+
+// A Road is a segment between two junctions. If a new road appears, such as an exit
+// ramp on a highway, a Junction is defined and one Road ends and two begin at that point.
+message Road {
+  string id = 1;
+  float length = 2;
+  float speed_limit = 3;
+  bool one_way = 4;
+
+  repeated Geometry geometries = 5;
+  repeated LaneSection lane_sections = 6;
+  repeated Signal signals = 7;
+
+  // A ConnectingRoad is present if this Road is a connection of two Roads in a Junction.
+  ConnectingRoad connecting_road = 8;
+
+  repeated string predecessor_road_ids = 9;
+  repeated string successor_road_ids = 10;
+  string predecessor_junction_id = 11;
+  string successor_junction_id = 12;
+  
+  // Elevation profile. If this is empty, height values must be baked into the geometries themselves.
+  repeated Elevation elevation = 13;
+}
+
+
+message Junction {
+  // A connection is always one-way, so that for two bi-directional roads that meet at
+  // a junction, two connections are specified. A regular four-way junction will 
+  // typically have 12 connections.
+  message Connection {
+    message RoadLink {
+      enum ContactType {
+        START = 0;
+        END = 1;
+      }
+      string road_id = 1;
+      ContactType contact_type = 2;
+    }
+
+    // This information is redundant with the ConnectingRoad and its 
+    // parent Road's predecessor/successorRoads.
+    RoadLink from_road = 1;
+    RoadLink to_road = 2;
+    string connecting_road_id = 3;
+  }
+
+  string id = 1;
+  repeated Connection connections = 2;
+
+  // This is the approximate world-space position of the center of the junction.
+  Vector3 approx_location = 3;
+  
+  // RoadRunner GUID.
+  string vector_id = 4;
+}
+
+
+message RoadNetwork {
+  string id = 1;
+  repeated Road roads = 2;
+  repeated Junction junctions = 3;
+  GeoCoordinates origin_coordinates = 4;
+}
+
+
+// Represents a point on the road network.
+message RoadPoint {
+  string road_id = 1;
+  int32 lane_section_index = 2;
+  int32 lane_index = 3;
+
+  // Distance from the beginning of the Road (meters) along the reference line.
+  // Note that this makes lane_section_index redundant but it is here for completeness.
+  float s = 4;
+  
+  // Offset from the center of the lane (meters). Positive is left in direction of increasing s.
+  float t = 5;
+
+  // Rotation in degrees from the direction of the lane (negative value to rotate ccw).
+  // This is currently only supported for parked vehicles. 
+  float heading_offset = 6;
+  
+  // This is only used for backwards compatibility with road networks.
+  Vector3 world_position = 7;
+}
+

@@ -1,0 +1,12 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+// Holds the geo coordinates.
+message GeoCoordinates {
+  float latitude = 1;   // degrees
+  float longitude = 2;  // degrees
+  float altitude = 3;   // m
+}

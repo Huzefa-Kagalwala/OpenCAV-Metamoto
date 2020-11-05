@@ -1,0 +1,50 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/quaternion.proto";
+import "metamoto/types/vector3.proto";
+
+// Data bus message published by the Localizer.
+// All published coordinate are in the world (East/Up/North) reference frame.
+message Localizer {
+  // Position of the vehicle. 
+  metamoto.types.Vector3 position = 1;
+
+  // A quaternion that represents the rotation from the world coordinate (East/Up/North) to sensors coordinate (Right/Up/Forward). 
+  metamoto.types.Quaternion orientation = 2;
+
+  // Linear velocity in meters per second. 
+  metamoto.types.Vector3 linear_velocity = 3;
+
+  // Linear acceleration in meters per second^2. 
+  metamoto.types.Vector3 linear_acceleration = 4;
+
+  // Angular velocity of the vehicle in radians per second. 
+  metamoto.types.Vector3 angular_velocity = 5;
+
+  // Standard deviation of the uncertainties
+  Uncertainty uncertainty = 6; 
+}
+
+message Uncertainty { 
+  // Standard deviation of position in meters.
+  metamoto.types.Vector3 position_std_dev = 1;
+
+  // Standard deviation of the orientation axis (quaternion qx,qy,qz) unitless.
+  metamoto.types.Vector3 orientation_axis_std_dev = 2;
+
+  // Standard deviation of the orientation angle in degrees.
+  float orientation_angle_std_dev = 3;
+
+  // Standard deviation of linear velocity in meters per second.
+  metamoto.types.Vector3 linear_velocity_std_dev = 4;
+
+  // Standard deviation of linear acceleration in meters per square second. 
+  metamoto.types.Vector3 linear_acceleration_std_dev = 5;
+  
+  // Standard deviation of angular velocity in radians per second. 
+  metamoto.types.Vector3 angular_velocity_std_dev = 6;
+}

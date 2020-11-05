@@ -1,0 +1,11 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+// Describes a normal distribution
+message NormalDistribution {
+  double mean = 1;
+  double std_dev = 2;
+}

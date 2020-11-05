@@ -1,0 +1,161 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+option csharp_namespace = "Metamoto.Services";
+
+import "metamoto/types/status.proto";
+import "metamoto/services/controller.proto";
+import "metamoto/services/data_bus.proto";
+import "metamoto/services/map.proto";
+import "metamoto/services/ray_tracer.proto";
+import "metamoto/services/reporting.proto";
+import "metamoto/services/scenario_service.proto";
+import "metamoto/services/sensor.proto";
+import "metamoto/services/system.proto";
+
+service SUTConnector {
+  rpc Connect (stream SUTConnectorRequest) returns (stream SUTConnectorReply) {}
+  rpc Heartbeat (SUTConnectorHeartbeatRequest) returns (SUTConnectorHeartbeatReply) {}
+}
+
+message SUTConnectorRequest {
+  oneof data_oneof {
+    google.rpc.Status status = 1;
+    SUTConnectorConnectRequest connect = 2;
+    SUTConnectorDisconnectRequest disconnect = 3;
+    
+    ControllerInitializeReply controller_initialize = 20;
+    ControllerUpdateReply controller_update = 21;
+    ControllerCloseReply controller_close = 22;
+    ControllerSetupReply controller_setup = 23;
+
+    SensorInitializeReply sensor_initialize = 40;
+    SensorUpdateReply sensor_update = 41;
+    SensorCloseReply sensor_close = 42;    
+    SensorSetupReply sensor_setup = 43;
+
+    DataBusPublishRequest data_bus_publish = 60;
+    DataBusSubscribeRequest data_bus_subscribe = 61;
+    DataBusWriteRequest data_bus_write = 62;
+    DataBusReadRequest data_bus_read = 63;
+    DataBusReadAllRequest data_bus_read_all = 64;  
+    DataBusReadLastRequest data_bus_read_last = 65;
+    
+    MapGetRoadNetworkRequest map_get_road_network = 80;
+    MapToRoadPointRequest map_to_road_point = 81;
+    MapToWorldPointRequest map_to_world_point = 82;
+    MapGetPathRequest map_get_path = 83;
+    MapGetHeadingRequest map_get_heading = 84;
+    
+    RayTracerSetPatternsRequest ray_tracer_set_patterns = 100;
+    RayTracerTraceRequest ray_tracer_trace = 101;
+    
+    ReportingAddTimeSeriesValueRequest reporting_add_time_series_value = 120;
+    ReportingLogRequest reporting_log = 121;
+    ReportingReportEventRequest reporting_report_event = 122;
+    ReportingVisualizeRequest reporting_visualize = 123;
+    
+    ScenarioUpdateRequest scenario_update = 140;
+    ScenarioGetVehicleWaypointsRequest scenario_get_vehicle_waypoints = 141;
+    ScenarioSetVehicleWaypointsRequest scenario_set_vehicle_waypoints = 142;
+    ScenarioSetDriverModelRequest scenario_set_driver_model = 143;
+    ScenarioSetupRequest scenario_setup = 144;
+    
+    SystemGetResultsSizeRequest system_get_results_size = 160;
+  }
+}
+
+message SUTConnectorReply {
+  oneof data_oneof {
+    google.rpc.Status status = 1;
+    SUTConnectorConnectReply connect = 2;
+    SUTConnectorDisconnectReply disconnect = 3;
+
+    ControllerInitializeRequest controller_initialize = 20;
+    ControllerUpdateRequest controller_update = 21;
+    ControllerCloseRequest controller_close = 22;
+    ControllerSetupRequest controller_setup = 23;
+  
+    SensorInitializeRequest sensor_initialize = 40;
+    SensorUpdateRequest sensor_update = 41;
+    SensorCloseRequest sensor_close = 42;
+    SensorSetupRequest sensor_setup = 43;
+    
+    DataBusPublishReply data_bus_publish = 60;
+    DataBusSubscribeReply data_bus_subscribe = 61;
+    DataBusWriteReply data_bus_write = 62;
+    DataBusReadReply data_bus_read = 63;
+    DataBusReadAllReply data_bus_read_all = 64;      
+    DataBusReadLastReply data_bus_read_last = 65;      
+    
+    MapGetRoadNetworkReply map_get_road_network = 80;
+    MapToRoadPointReply map_to_road_point = 81;
+    MapToWorldPointReply map_to_world_point = 82;
+    MapGetPathReply map_get_path = 83;
+    MapGetHeadingReply map_get_heading = 84;
+
+    RayTracerSetPatternsReply ray_tracer_set_patterns = 100;
+    RayTracerTraceReply ray_tracer_trace = 101;
+
+    ReportingAddTimeSeriesValueReply reporting_add_time_series_value = 120;
+    ReportingLogReply reporting_log = 121;
+    ReportingReportEventReply reporting_report_event = 122;
+    ReportingVisualizeReply reporting_visualize = 123;    
+    
+    ScenarioUpdateReply scenario_update = 140;
+    ScenarioGetVehicleWaypointsReply scenario_get_vehicle_waypoints = 141;
+    ScenarioSetVehicleWaypointsReply scenario_set_vehicle_waypoints = 142;
+    ScenarioSetDriverModelReply scenario_set_driver_model = 143;    
+    ScenarioSetupReply scenario_setup = 144;    
+
+    SystemGetResultsSizeReply system_get_results_size = 160;
+  }
+}
+
+message SUTConnectorConnectRequest {
+  enum SUTType {
+    SUT_TYPE_UNKNOWN = 0;
+    SUT_TYPE_CONTROLLER = 1;
+    SUT_TYPE_SENSOR = 2;
+  }
+    
+  string id = 1;
+  SUTType type = 2;
+}
+
+message SUTConnectorDisconnectRequest {
+}
+
+message SUTConnectorConnectReply {
+}
+
+message SUTConnectorDisconnectReply {
+}
+
+message SUTConnectorHeartbeatRequest {
+  string id = 1;
+}
+
+message SUTConnectorHeartbeatReply {
+}
+
+service SUTConnectorQuery {
+  rpc GetConnectedSUTs (SUTConnectorQueryGetConnectedSUTsRequest) returns (SUTConnectorQueryGetConnectedSUTsReply) {}
+}
+
+message SUTConnectorQueryGetConnectedSUTsRequest {
+}
+
+message SUTConnectorQueryGetConnectedSUTsReply {
+  message SUT {
+    string id = 1;
+    uint32 port = 2;
+  }
+
+  repeated SUT suts = 1;
+}
+
+
+
+

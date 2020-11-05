@@ -1,0 +1,25 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/enumerations.proto";
+
+// Holds the return information for a single lidar laser.  Supports multiple returns.
+message LaserReturn {
+  // elevation angle of this laser in degrees
+  float elevation_angle = 1;
+  
+  // returned ranges  
+  repeated float ranges = 2;
+  
+  // returned intensities (between 0 and the `beamIntensity` parameter defined in lidar settings)
+  repeated float intensities = 3;
+  
+  // The object IDs (ground truth)
+  repeated uint32 object_ids = 4;
+  
+  // The object types (ground truth)
+  repeated ObjectType object_types = 5;
+}

@@ -1,0 +1,84 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/acceleration.proto";
+import "metamoto/types/pose.proto";
+import "metamoto/types/roads.proto";
+import "metamoto/types/shape.proto";
+import "metamoto/types/velocity.proto";
+
+// Represents a vehicle and holds ground truth information.
+message Vehicle {
+  // Object ID of the vehicle.
+  string id = 1;
+  
+  // Position and orientation in world coordinates.
+  Pose pose = 2;
+
+  // Position on the road network. Multiple road points may be returned if
+  // the vehicle is in an intersection and on multiple, overlapping connecting
+  // roads.
+  repeated RoadPoint road_point = 3;
+  
+  // Velocity in world coordinates (in m/s)
+  Velocity velocity = 4;
+  
+  // Acceleration in world coordinates (in m/s^2)
+  Acceleration acceleration = 5;
+  
+  // Shape containing the vehicle.
+  Shape shape = 6;  
+
+  enum Type {
+    TYPE_UNKNOWN = 0;
+    TYPE_OTHER = 1;
+    CAR = 2;
+    TRUCK = 3;
+    BUS = 4;
+    MOTORCYCLE = 5;
+    BICYCLE = 6;
+    TRAIN = 7;
+    STREET_CAR = 8;
+  }
+  Type type = 7;  
+    
+  enum LightState {
+    LIGHT_STATE_UNKNOWN = 0;
+    LIGHT_STATE_OTHER = 1;
+    OFF = 2;
+    ON = 3;
+    STRONG = 4;
+  }
+
+  LightState head_lights = 8;
+  LightState reverse_lights = 9;
+  LightState brake_lights = 10;
+  
+  
+  enum SignalLightState {
+    SIGNAL_LIGHT_STATE_UNKNOWN = 0;
+    SIGNAL_LIGHT_STATE_OTHER = 1;
+    SIGNAL_LIGHT_STATE_OFF = 2;
+    LEFT = 3;
+    RIGHT = 4;
+    HAZARD = 5;
+  } 
+  SignalLightState signal_lights = 11;
+  
+  enum GearSelector {
+    GEAR_UNKNOWN = 0;
+    GEAR_OTHER = 1;
+    GEAR_P = 2;
+    GEAR_R = 3;
+    GEAR_N = 4;
+    GEAR_D = 5;
+    GEAR_L = 6;
+  }
+  
+  string model = 12;
+  string paint = 13;
+}
+

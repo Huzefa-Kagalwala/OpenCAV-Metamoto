@@ -1,0 +1,38 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "google/protobuf/wrappers.proto";
+import "metamoto/types/roads.proto";
+import "metamoto/types/pose.proto";
+
+message Waypoint {
+	oneof point_oneof {
+    // The waypoint position and orientation in world coordinates. The orientation is
+    // ignored for anything but the first waypoint (spawn point) of a vehicle.
+    // If the first waypoint has no orientation and is marked as pure-pursuit, the
+    // orientation will be calculated using the direction beween the first and the
+    // second waypoints.
+    Pose world_point = 1;
+	  
+	  // The waypoint position on the road network.
+    RoadPoint road_point = 2;
+  }
+  
+  // The target speed in m/s. Unset means a target speed is not set, while a value of 0
+  // indicates that the vehicle should stop. Traffic vehicles can only approximate this 
+  // target speed, and obstacles, rules of the road, and smaller Driver model implicit speed take precedence.
+  google.protobuf.FloatValue target_speed = 3;
+
+  // Whether this waypoint is to be followed directly, skipping path planning.
+  bool pure_pursuit = 4;
+
+  // Time to remain stopped (if target_speed is set to 0) at this waypoint.
+  float idle_time = 5;
+
+  // EXPERIMENTAL. Indicates a relative waypoint. If set, this is the ID of the object (vehicle) 
+  // relative to which the point is defined.
+  string relative_object_id = 6;
+}
