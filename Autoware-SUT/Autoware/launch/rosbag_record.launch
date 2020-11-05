@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="no" ?>
+<launch>
+  <arg name="prefix" />
+  <node pkg="rosbag" type="record" name="asm_bag"
+    args="record --lz4 -b 1024 -o $(env RESULTS)/ -a -x
+    '/points_map|/points_cluster|/points_ground'
+    "/>
+</launch>

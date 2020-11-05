@@ -1,0 +1,22 @@
+{
+  "name": "models",
+  "version": "0.0.0",
+  "description": "",
+  "author": "Metamoto",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine-ts \"**/*.spec.ts\""
+  },
+  "dependencies": {
+    "@types/jasmine": "^2.8.8",
+    "@types/long": "^4.0.0",
+    "axios": "^0.19.2",
+    "cerialize": "^0.1.18",
+    "fs-extra": "^9.0.0",
+    "jasmine": "^3.2.0",
+    "jasmine-ts": "^0.2.1",
+    "protobufjs": "^6.8.6",
+    "three": "^0.96.0"
+  }
+}

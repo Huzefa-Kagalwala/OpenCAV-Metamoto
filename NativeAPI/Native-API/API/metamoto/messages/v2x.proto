@@ -1,0 +1,129 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/vehicle.proto";
+import "metamoto/types/vector3.proto";
+import "metamoto/types/geo_coordinates.proto";
+
+// Data bus message published by the V2X sensor.
+message V2X {
+  // Part 1 of the Basic Safety Message. One entry per every other ego-vehicle within the sensor's maximum distance.
+  repeated BsmPart1 bsm_part_1 = 1;
+  
+  // Holds Part 1 data of the Basic Safety Message (BSM).
+  // Vector3 fields are published in the world RUF (right/up/forward) reference frame.
+  message BsmPart1 {
+    // Object ID of the ego vehicle that transmitted this message.
+    int32 object_id = 1;
+    
+    // Time stamp this message was transmitted (in seconds). Data latency currently does not affect this value.
+    double time_stamp = 2;
+    
+    // Vehicle's position (lat/lon/alt) read from the GPS sensor.
+    // Empty if the vehicle does not have GPS.
+    metamoto.types.GeoCoordinates position = 3;
+    
+    // Positional accuracies.
+    PositionalAccuracy accuracy = 4;
+    
+    // Transmission state.
+	  metamoto.types.Vehicle.GearSelector transmission_state = 5;
+    
+    // Linear velocity in meters per second.
+    metamoto.types.Vector3 linear_velocity = 6;
+    
+    // Steering wheel angle in degrees.
+    float steering_wheel_angle = 7;
+    
+    // Linear acceleration in meters per second^2.
+    metamoto.types.Vector3 linear_acceleration = 8;
+    
+    // Angular velocity in degrees per second.
+    float yaw_rate = 9;
+    
+    // Brake system status.
+    BrakeSystemStatus brakes = 10;
+    
+    // Vehicle size in meters.
+    metamoto.types.Vector3 vehicle_size = 11;
+  }
+  
+  message PositionalAccuracy {
+    // Semi-major accuracy (in meter) at one standard dev. Negative value if GPS is unavailable.
+    float semi_major = 1;
+    
+    // Semi-minor accuracy (in meter) at one standard dev. Negative value if GPS is unavailable.
+    float semi_minor = 2;
+    
+    // Orientation accuracy of semi-major axis (in degrees). Negative value if unavailable. This value is currently always set to -1.
+    float orientation = 3;
+  }
+  
+  message BrakeSystemStatus {
+    message BrakeAppliedStatus {
+      bool left_front = 1;
+      bool left_rear = 2;
+      bool right_front = 3;
+      bool right_rear = 4;
+    }
+    
+    enum TractionControlState {
+      // Not Equipped with traction control or traction control status is unavailable.
+      TRACTION_UNAVAILABLE = 0;
+  	  
+      // Traction control is Off.
+      TRACTION_OFF = 1;
+      
+      // Traction control is On (but not Engaged).
+      TRACTION_ON = 2;
+      
+      // Traction control is Engaged.
+      TRACTION_ENGAGED = 3;
+    }
+    
+    enum AntiLockBrakeStatus {
+      // Vehicle Not Equipped with ABS or ABS status is unavailable.
+      ABS_UNAVAILABLE = 0;
+      
+      // Vehicle's ABS is Off.
+      ABS_OFF = 1;
+      
+      // Vehicle's ABS is On (but not Engaged).
+      ABS_ON = 2;
+      
+      // Vehicle's ABS is Engaged.
+      ABS_ENGAGED = 3;
+    }
+    
+    enum StabilityControlStatus {
+      // Vehicle Not Equipped with SC or SC status is unavailable.
+      SC_UNAVAILABLE = 0;
+      
+      // Vehicle's SC is off.
+      SC_OFF = 1;
+      
+      // Vehicle's SC is on or active (engaged).
+      SC_ON = 2;
+    }
+    
+    enum BrakeBoostApplied {
+      // Vehicle Not Equipped with brake boost or brake boost status is unavailable.
+      BB_UNAVAILABLE = 0;
+      
+      // Vehicle's brake boost is off.
+      BB_OFF = 1;
+      
+      // Vehicle's brake boost is on (applied).
+      BB_ON = 2;
+    }
+    
+    BrakeAppliedStatus wheel_brakes = 1;
+    TractionControlState traction = 2;
+    AntiLockBrakeStatus abs = 3;
+    StabilityControlStatus scs = 4;
+    BrakeBoostApplied brake_boost = 5;
+  }
+}

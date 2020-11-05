@@ -1,0 +1,421 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "google/protobuf/wrappers.proto";
+import "metamoto/types/asset.proto";
+import "metamoto/types/environment.proto";
+import "metamoto/types/normal_distribution.proto";
+import "metamoto/types/pedestrian.proto";
+import "metamoto/types/pose.proto";
+import "metamoto/types/range.proto";
+import "metamoto/types/roads.proto";
+import "metamoto/types/vector3.proto";
+import "metamoto/types/vehicle_instance.proto";
+import "metamoto/types/version.proto";
+import "metamoto/types/waypoint.proto";
+
+message Scenario {
+  string id = 1;
+  string name = 2;
+  string scene = 3;
+  string description = 4;
+  bool read_only = 5;
+  Version version = 17;
+
+  message System {
+    int32 random_seed = 1;
+    string host = 2; 
+    bool record_ground_truth = 3;
+    bool profile = 4;
+    float physics_rate = 5;
+
+    message Encoder {
+      string ffmpeg_exe = 1;
+      string ffmpeg_codec = 2;
+      string ffmpeg_codec_options = 3;
+    }
+    Encoder encoder = 6;
+
+    message Logger {
+      string mode = 1;
+      string filename = 2;  // Deprecated.
+      string address = 3;
+      int32 port = 4;
+    }
+    Logger logger = 7;
+
+    message RayTracer {
+      string url = 1;
+      bool file_mode = 2;
+      int32 file_threshold = 3;
+    }
+    RayTracer ray_tracer = 8;
+
+    message Service {
+      int32 port = 1;
+      int32 external_port = 2;
+    }
+    // Key is name of service.
+    map<string, Service> services = 9;
+    
+    // Some objects like vegetations, buildings and vehicles have several meshes with different level of details (LODs) assigned to them.
+    enum LevelOfDetail {
+      DYNAMIC = 0; // The level of details is determined based on the object's distance to the camera. Not applicable to the ray-tracer.
+      HIGH = 1; // Use the highest LOD
+      MEDIUM = 2; // Use the second highest LOD
+      LOW = 3; // Use the third highest LOD if available. Otherwise the second highest LOD is used.
+    }
+    
+    // The level of details used for rendering cameras (default: DYNAMIC).
+    LevelOfDetail camera_lod = 10;
+    
+    // The level of details used for ray-tracing. Only HIGH, MEDIUM and LOW options are supported (default: HIGH).
+    LevelOfDetail ray_tracer_lod = 11;
+  }
+  System system = 6;
+
+  message Objectives {
+    // Test duration in seconds. Default is 60s. Should always be set to prevent infinitely-running tests.
+    float duration = 1;
+
+    oneof destination_oneof {
+      // Ego vehicle target destination (note that this is not added to its path). 
+      // If duration passes before destination is reached, test will fail.
+      Vector3 destination_world_point = 2;
+      RoadPoint destination_road_point = 3;
+    }
+    // Distance from destination to be considered reached. Must be > 0. Default: 1m.
+    float destination_radius = 4;
+
+    repeated Infraction infractions = 5;
+
+    float random_failure_probability = 6;
+    bool monitor_all_vehicles = 7;
+  }
+  Objectives objectives = 7;
+
+  Environment environment = 8;
+
+  message EgoVehicle {
+    repeated Waypoint path = 1;
+    DriverModel driver_model = 2;
+    bool random_spawn_point = 3;
+  }
+  EgoVehicle ego_vehicle = 9;  // For backwards compatibility only; use the repeated field ego_vehicles.
+
+  message Traffic {
+    repeated Vector3 region = 1;
+
+    message Distribution {
+      map<string, float> model_weights = 1;
+      map<string, float> type_weights = 2;   // NOTE this string key must correspond to Vehicle.Type.
+      map<string, float> paint_weights = 3;
+    }
+    // Distribution for randomly-generated vehicles.
+    Distribution distribution = 2;
+
+    oneof random_oneof {
+      int32 num_random_vehicles = 3;
+      float congestion = 4; // 0-1.
+    }
+
+    // Emit vehicles during test run.
+    repeated TrafficFlow flows = 5;
+
+    // These are the concretely-defined vehicles (which may have random model/type/paint/path).
+    repeated TrafficVehicle vehicles = 6;
+
+    // Distribution for randomly-generated parked vehicles.
+    Distribution parked_distribution = 7;
+
+    oneof random_parked_oneof {
+      int32 num_random_parked_vehicles = 8;
+      float parking_fullness = 9; // 0 to 1.
+    }
+
+    // These are the concretely-defined parked vehicles.
+    repeated ParkedVehicle parked_vehicles = 10;
+  }
+  Traffic traffic = 10;
+
+  message Pedestrians {
+    repeated Vector3 region = 1;
+
+    message Distribution {
+      map<string, float> name_weights = 1;
+      map<string, float> type_weights = 2;  // NOTE this string key must correspond to Pedestrian.Type.
+      map<string, float> state_weights = 3; // NOTE this string key must correspond to PedestrianConfiguration.State.
+    }
+    // Distribution for randomly-generated pedestrians.
+    Distribution distribution = 2;
+    
+    // These are the concretely-defined pedestrians.
+    repeated PedestrianConfiguration pedestrians = 3;
+
+    oneof random_oneof {
+      int32 num_random_pedestrians = 4;
+      float pedestrian_traffic = 5; // 0 to 1.
+    }
+  }
+  Pedestrians pedestrians = 11;
+
+  // TrafficLight is DEPRECATED. See Intersection.
+  message TrafficLight {
+    message Direction {
+      // RoadNetwork Signal ID.
+      string id = 1;
+      // Default 15s.
+      google.protobuf.FloatValue green_time = 2;
+      // Default 3s.
+      google.protobuf.FloatValue yellow_time = 3;
+      // Default 6s.
+      google.protobuf.FloatValue crosswalk_walk_time = 4;
+
+      // Other Direction/Signal ID to synchronize with (only one-way synchronization needed).
+      string synchronize_with_direction_id = 5;
+    }
+    // If only one direction is given, the others are assumed the same.
+    repeated Direction directions = 1;
+    
+    // Default 1.5s.
+    float all_red_time = 2;
+
+    // Id of the direction that will start as green.
+    string start_green_direction = 3;
+
+    // The offset into the cycle at which to start, in seconds. Default 0s.
+    float start_cycle_offset = 4;
+  }
+  // DEPRECATED
+  map<string, TrafficLight> traffic_lights = 12;
+
+  repeated Event events = 13;
+
+  // List of assets used by the scenario. Assets contain elements such as the scene and vehicles.
+  repeated Asset assets = 14;
+
+  repeated EgoVehicle ego_vehicles = 15;
+
+  message Intersection {
+    message SignalState {
+      string signal_id = 1;
+      string state_name = 2;
+    }
+    message IntersectionState {
+      float duration = 1;
+      repeated SignalState signal_states = 2;
+    }
+
+    message Phase {
+      repeated IntersectionState intersection_states = 1; // 3 items (red yellow green)
+    }
+    
+    repeated Phase phases = 1;
+    int32 starting_phase_index = 2;
+    float starting_duration_offset = 3;
+    Vector3 position = 4;
+
+    // RoadRunner GUID
+    string vector_id = 5;
+  }
+  // Key is RoadNetwork Intersection ID.
+  map<string, Intersection> intersections = 16;
+
+  // Each value in the Scenario can instead be represented as a Range. It will then appear in this map, 
+  // keyed by its 'address' into the Scenario structure, e.g.: 'system/random_seed', 'objectives/destination_v3/x',
+  // 'traffic/0/vehicles/5/path/0/road_point/s'.
+  map<string, Range> ranges = 100;
+}
+
+
+message Infraction {
+  enum Type {
+    UNKNOWN = 0;
+    OTHER = 1;
+    VEHICLE_COLLISION = 2;      // Values are time-to-collision (TTC) in seconds. Default: 0/0.
+    PEDESTRIAN_COLLISION = 3;   // Values are time-to-collision (TTC) in seconds. Default: 0/0.
+    ENVIRONMENT_COLLISION = 4;  // Values are time-to-collision (TTC) in seconds. Default: 0/null.
+    OBSTACLE_COLLISION = 5;     // Values are time-to-collision (TTC) in seconds. Default: 0/null.
+    TRAFFIC_LIGHT = 6;          // Values are distance stopped over the line in m. Default: 0/1.
+    STOP_SIGN = 7;              // Values are distance stopped over the line in m. Default: 0/1. Secondary values are minimum speed in m/s. Default: 0.5/1.
+    SPEED_LIMIT = 8;            // Values are the amount above the speed limit in m/s. Default: 5/10.
+    HARD_BRAKE = 9;             // Values are the maximum braking accelerations (maximally negative in m/s^2). Default: -7/-10.
+    WRONG_WAY = 10;             // Values are duration of infraction in seconds. Default: 1/3.
+    OFF_ROAD = 11;              // Values are duration of infraction in seconds. Default: 1/3.
+    EXTERNAL_WARNING = 12;      // Values are user-reported from the ReportingService.
+    EXTERNAL_FAILURE = 13;      // Values are user-reported from the ReportingService.
+    EXTERNAL_PASS = 14;         // Reported from the ReportingService.
+    EXTERNAL_STOP = 15;         // Reported from the ReportingService.
+  }
+  Type type = 1;
+
+  // Fail/stop values should be null to prevent the corresponding action in the simulation.
+
+  // The value at which to mark the test as failed, but continue.
+  google.protobuf.FloatValue fail_value = 2;
+  // The value at which to mark the test as failed and stop the test.
+  google.protobuf.FloatValue stop_value = 3;
+  // Secondary values can be stored here.
+  repeated google.protobuf.FloatValue other_values = 4;
+}
+
+
+message DriverModel {
+  // Collision avoidance safety parameter (0-infinity, default: 1).
+  float collision_avoidance = 1;
+  // Coefficient of speed limit the vehicle attains on a given road (0-infinity, default: random within 0.9-1.1). Maximum speed vehicle can attain. Overrides larger Waypoint.target_speed values.
+  float speed_coefficient = 2;
+  // Whether vehicle obeys traffic lights and signals (default: true).
+  bool obeys_lights = 3;
+  // Whether vehicle generates a random path (after any defined path) (default: false).
+  bool random_path = 4;
+  // How aggressively to change lanes (0-1, 0: smoothest, 1: quickest, default: 0).
+  float lane_change_optimization = 5;
+  // Maximum random deviation from lane center (0-1, default: 0.1).
+  float lane_center_deviation = 6;
+  // Multiplier of standard time and distance gap to fore vehicle (0.1-2, default: 1).
+  float timegap_multiplier = 7;
+  // Reaction delay in seconds (0.1-1, default: 0.1s).
+  //float reaction_delay = 8;
+
+  message BrakingBehavior {
+    // Threshold of desired deceleration at which to start braking, in m/s^2 (-5: aggressive, to 0: conservative; default: -1).
+    float coast_deceleration_threshold = 7;
+    // Speed below which to turn off coasting, ignoring the coast_deceleration_threshold, in m/s (0-infinity, default: 5).
+    float coast_speed_threshold = 1;
+    // Minimum brake pedal position, below which it is just set to 0 (default: 0.08).
+    float min_brake = 2;
+  }
+  BrakingBehavior braking_behavior = 9;
+}
+
+
+// Represents a flow of traffic from one source point to one (or many) sink points
+// where vehicles are generated at sources and terminated at sinks. 
+message TrafficFlow {
+  message LaneSpan {
+    string road_id = 1;
+    float s = 2;
+    repeated int32 lanes = 3;
+    
+    // One for each of the lane indices in lanes. For road network backwards compatibility.
+    repeated Vector3 positions = 4;
+  }
+  
+  int32 id = 1;
+  LaneSpan source = 2;
+  repeated LaneSpan sinks = 3;
+  // rate of vehicle generation (0-120 vehicles per minute, default: 0).
+  NormalDistribution generation_rate = 4; 
+  float speed = 5;
+  bool populate = 6;
+}
+
+
+// Represents a traffic vehicle instance with a path and driver model.
+message TrafficVehicle {
+  string display_name = 1;
+  VehicleInstance instance = 2;
+  repeated Waypoint path = 3;
+  DriverModel driver_model = 4;
+  int32 flow_id = 5;
+}
+
+
+// Represents a parked vehicle instance with a position.
+message ParkedVehicle {
+  string display_name = 1;
+  VehicleInstance instance = 2;
+  oneof point_oneof {
+    Pose world_point = 3;
+    RoadPoint road_point = 4;
+  }
+}
+
+
+// Represents a pedestrian instance in a scenario configuration.
+message PedestrianConfiguration {
+  enum State {
+    STATE_UNKNOWN = 0;
+    STATE_OTHER = 1;
+    IDLE = 2;
+    WALK = 3;
+    RUN = 4;
+    RUN_IN_PLACE = 5;
+  }
+   
+  enum PathingBehaviour {
+    // Normal pedestrian, will use crosswalks.
+    STANDARD = 0;
+    // Will walk wherever a path point is set including onto the road.
+    UNCONSTRAINED = 1;
+  }  
+  
+  string display_name = 1;
+  // Leave unset for random.
+  oneof instance_oneof {
+    string name = 2;
+    Pedestrian.Type type = 3;
+  }
+
+  message PathPoint {
+    State state = 1;
+    uint32 state_variant = 2;
+    // Only for moving states or spawn point.
+    Vector3 target_point = 3;
+    // Only for idling states.
+    float wait_time = 4;
+	
+    PathingBehaviour pathing_behaviour = 5;
+  }
+  repeated PathPoint path = 4;
+
+  bool random_path = 5;
+}
+
+
+message Event {
+  enum ObjectType {
+    OBJECT_OTHER = 0;
+    SENSOR = 1;             // ACTIVATE, DEACTIVATE, SEND
+    CONTROLLER = 2;         // ACTIVATE, DEACTIVATE, SEND
+    EGO_VEHICLE = 3;        // ACTIVATE, DEACTIVATE, MODIFY
+    TRAFFIC_VEHICLE = 4;    // ACTIVATE, DEACTIVATE, CREATE, REMOVE, MODIFY
+    TRAFFIC_FLOW = 5;       // ACTIVATE, DEACTIVATE
+    PEDESTRIAN = 6;         // ACTIVATE, DEACTIVATE
+    TRAFFIC_LIGHT = 7;      // ACTIVATE, DEACTIVATE, MODIFY
+    ENVIRONMENT = 8;        // MODIFY
+  }
+  ObjectType object_type = 1;    // The object of the event.
+
+  enum Action {
+    ACTION_OTHER = 0;
+    ACTIVATE = 1;   // The event activates an object.
+    DEACTIVATE = 2; // The event deactivates an object.
+    CREATE = 3;     // The event creates an object.
+    REMOVE = 4;     // The event removes an object.
+    MODIFY = 5;     // The event modifies a parameter.
+    SEND = 6;       // The event sends a message to a sensor/controller.
+  }
+  Action action = 2;
+
+  // Event type: one of time or trigger must be set.
+
+  double time = 3;  // (optional) If >0, time at which to fire the event.
+
+  message ProximityTrigger {
+    Vector3 location = 1;         // Trigger location world point.
+    float radius = 2;             // Distance to trigger. Default is 1m.
+    int32 ego_vehicle_index = 3;  // The ego vehicle index that triggers this event.
+  }
+  ProximityTrigger trigger = 4;   // (optional) If exists, location of Ego Vehicle at which to fire the event.
+
+  string id = 5;                      // The ID specific to the object of the event.
+  string secondary_id = 6;            // (optional) ID of any additional object.
+  repeated string payload_string = 7; // (optional) E.g. command to send to a controller.
+  repeated float payload_float = 8;   // (optional) E.g. value of a parameter to set.
+  repeated Waypoint waypoints = 9;    // (optional) New waypoints to send to event vehicle.
+}

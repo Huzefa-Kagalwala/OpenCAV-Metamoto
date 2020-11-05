@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="no" ?>
+<launch>
+
+  <include file="/metamoto/launch/map.launch" />
+  <include file="/metamoto/launch/sensing.launch" />
+  <include file="/metamoto/launch/localization.launch" />
+  <include file="/metamoto/launch/detection.launch" />
+  <include file="/metamoto/launch/mission_planning.launch" />
+  <include file="/metamoto/launch/motion_planning.launch" />
+
+</launch>

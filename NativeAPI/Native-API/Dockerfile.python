@@ -1,0 +1,23 @@
+# Start with tensorflow docker for python developer
+FROM tensorflow/tensorflow:1.13.2-py3
+
+RUN apt-get update && yes | apt-get upgrade
+
+# Install ffmpeg and packages
+RUN apt-get install -y ffmpeg vim
+RUN pip3 install numpy matplotlib pillow grpcio==1.18.0 grpcio-tools==1.18.0
+
+WORKDIR /metamoto
+
+# Copy the API and SUT directories
+COPY API API
+COPY SUT/python SUT/python
+
+# Build the API classes
+RUN cd SUT/python && make clean && make
+
+# Make py file executable
+RUN chmod +x SUT/python/vehicle_detector.py
+
+# Run commands on container launch here
+# CMD python /metamoto/SUT/python/vehicle_detector.py

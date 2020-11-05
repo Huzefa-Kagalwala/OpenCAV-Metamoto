@@ -1,0 +1,36 @@
+FROM ros:kinetic
+
+# needed for grpc
+RUN apt-get update && apt-get install -y libcurl4-gnutls-dev libssl-dev
+
+# Grpc stuff is copied from: https://hub.docker.com/r/grpc/cxx/~/dockerfile/
+RUN apt-get update && apt-get install -y \
+  build-essential autoconf git pkg-config \
+  automake libtool curl make g++ unzip vim \
+  && apt-get clean
+
+# install protobuf first, then grpc
+ENV GRPC_RELEASE_TAG v1.18.x
+RUN git clone -b ${GRPC_RELEASE_TAG} https://github.com/grpc/grpc /var/local/git/grpc && \
+		cd /var/local/git/grpc && \
+    git submodule update --init --recursive && \
+    echo "--- installing protobuf ---" && \
+    cd third_party/protobuf && \
+    ./autogen.sh && ./configure --enable-shared && \
+    make -j$(nproc) && make -j$(nproc) check && make install && make clean && ldconfig && \
+    echo "--- installing grpc ---" && \
+    cd /var/local/git/grpc && \
+    make -j$(nproc) && make install && make clean && ldconfig
+
+COPY . /metamoto
+RUN cd /metamoto && make clean && make
+RUN cd /metamoto/sut_connector && make clean && make
+
+# these are needed for the ros_sut, but autoware_msgs is still required, so it's best
+# just to install autoware in the container, then all ROS dependencies will be present
+#RUN apt-get install -y --allow-unauthenticated \
+#  fonts-liberation graphviz libcdt5 libcgraph6 libgvc6 libgvpr2 libpathplan4 libxaw7 libxmu6 libxt6 \
+#  ros-kinetic-tf ros-kinetic-tf2 ros-kinetic-tf2-msgs ros-kinetic-tf2-py ros-kinetic-tf2-ros ros-kinetic-nmea-msgs
+#SHELL ["/bin/bash", "-c"]
+#RUN cd /metamoto/catkin_ws && rm -rf devel build && source /opt/ros/kinetic/setup.bash && catkin_make
+

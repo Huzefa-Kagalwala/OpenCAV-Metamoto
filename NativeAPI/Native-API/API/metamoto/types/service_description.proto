@@ -1,0 +1,15 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+// Holds information about a service
+message ServiceDescription {
+  // The service name
+  string name = 1;
+
+  // The service's URI
+  string uri = 2;
+}
+

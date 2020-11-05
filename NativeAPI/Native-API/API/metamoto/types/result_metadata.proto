@@ -1,0 +1,20 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+// Holds metadata for data written by a sensor or controller that is part of a simulation result.
+message ResultMetadata {
+  // The name
+  string name = 1;
+  
+  // The type (video, image, log, pointcloud, ...)
+  string type = 2;
+  
+  // The data format (mp4, png, jpg, json, ...)
+  string format = 3;
+  
+  // The relative path to the data within the sensor or controller results directory
+  string path = 4;
+}

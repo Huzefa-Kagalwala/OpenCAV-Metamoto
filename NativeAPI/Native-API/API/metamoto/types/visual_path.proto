@@ -1,0 +1,21 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/vector3.proto";
+
+message VisualPathPoint {
+  Vector3 position = 1;
+  Vector3 normal = 2; // ignored if glue enabled
+  uint32 smoothness = 3;
+  bool glue = 4; // lower point to the ground below
+  float width = 5; 
+  string color = 6; // #HEX value or color name
+  float transparency = 7; // range: 0 - 1
+}
+
+message VisualPath {
+  repeated VisualPathPoint path_points = 1;
+}

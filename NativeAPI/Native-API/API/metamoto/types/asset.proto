@@ -1,0 +1,10 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+message Asset {
+  string name = 1;
+  string version = 2;   // May be missing or 'latest'.
+}

@@ -1,0 +1,83 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/scenario.proto";
+import "metamoto/types/roads.proto";
+
+message SignalConfiguration {
+  message Signal {
+    enum ConnectionState  {
+      CONNECTION_STATE_UNKNOWN = 0;
+      CONNECTION_STATE_OTHER = 1;
+      GREEN = 2;
+      YELLOW = 3;
+      RED = 4;
+    }
+    enum ConnectionType {
+      CONNECTION_TYPE_UNKNOWN = 0;
+      CONNECTION_TYPE_OTHER = 1;
+      PROTECTED = 2;
+      PERMISSIVE = 3;
+    }
+
+    message Connection {
+      ConnectingRoad.Direction direction = 1;
+      ConnectionState state = 2;
+      ConnectionType type = 3;
+    }
+
+    message BulbState { // maybe add more stuff
+      enum State {
+        OFF = 0;
+        ON = 1;
+        BLINKING = 2;
+        STATE_UNKNOWN = 7;
+      }
+      State state = 1;
+    }
+
+    message SignalState {
+      // Set of logical connections for this signal state.
+      repeated Connection connections = 1;
+      // Set of physical bulb states for this signal state.
+      repeated BulbState bulb_states = 2;
+    }
+    // Key is state name (e.g. "Green").
+    map<string, SignalState> signal_states = 1;
+    string description = 2;
+
+    message BulbType {
+      enum Type {
+        TYPE_UNKNOWN = 0;
+        TYPE_OTHER = 1;
+        NORMAL = 2;
+        LEFT = 3;
+        RIGHT = 4;
+        SOFT_LEFT = 5;
+        SOFT_RIGHT = 6;
+      }
+      enum Color {
+        COLOR_UNKNOWN = 0;
+        COLOR_OTHER = 1;
+        GREEN = 2;
+        YELLOW = 3;
+        RED = 4;
+      }
+      Type type = 1;
+      Color color = 2;
+    }
+    // Parallel to bulb_states.
+    repeated BulbType bulb_types = 3;
+  }
+  // Key is configuration ID.
+  map<string, Signal> signals = 1;
+}
+
+message IntersectionConfiguration {
+  // Default configurations. Key is junction ID.
+  map<string, Scenario.Intersection> intersections = 1;
+}
+

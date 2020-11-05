@@ -1,0 +1,70 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/pose.proto";
+import "metamoto/types/shape.proto";
+import "metamoto/types/signal_configuration.proto";
+
+// Represents a traffic light and holds ground truth information.
+message TrafficLight {
+  // Object ID of the traffic light.
+  string id = 1;
+  
+  // Signal ID in the road network.
+  string signal_id = 2;
+  
+  // Position and orientation in world coordinates.
+  Pose pose = 3;  
+  
+  Shape shape = 4;
+
+  // Deprecated  
+  Type type = 5;
+
+  // Deprecated  
+  Color color = 6;
+
+  // Deprecated  
+  Mode mode = 7;
+  
+  // Deprecated  
+  enum Type {
+    TYPE_UNKNOWN = 0;
+    TYPE_OTHER = 1;
+    NORMAL = 2;
+    LEFT = 3;
+    LEFT_STRAIGHT = 4;
+    RIGHT = 5;
+    RIGHT_STRAIGHT = 6;
+  }
+  
+  // Deprecated  
+  enum Color {
+    COLOR_UNKNOWN = 0;
+    COLOR_OTHER = 1;
+    RED = 2;
+    YELLOW = 3;
+    GREEN = 4;
+  }
+  
+  // Deprecated  
+  enum Mode {
+    MODE_UNKNOWN = 0;
+    MODE_OTHER = 1;
+    OFF = 2;
+    CONSTANT = 3;
+    BLINKING = 4;  
+  }
+  
+  // Intersection ID in the road network
+  string intersection_id = 8;
+
+  // Current logical and physical state of the signal
+  SignalConfiguration.Signal.SignalState state = 9;
+  
+  // Type and color of the physical bulbs
+  repeated SignalConfiguration.Signal.BulbType bulb_types = 10;
+}

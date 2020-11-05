@@ -1,0 +1,13 @@
+<?xml version="1.0" standalone="no" ?>
+<launch>
+
+  <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 /world /map 10" />
+  <node pkg="tf" type="static_transform_publisher" name="map_to_mobility" args="0 0 0 0 0 0 /map /mobility 10" />
+
+  <!-- Point Cloud -->
+  <node pkg="map_file" type="points_map_loader" name="points_map_loader" args="noupdate $(env SCENE).pcd"/>
+
+  <!-- Vector Map -->
+  <node pkg="map_file" type="vector_map_loader" name="vector_map_loader" args="$(env SCENE)/map/vector_map/lane.csv $(env SCENE)/map/vector_map/line.csv $(env SCENE)/map/vector_map/node.csv $(env SCENE)/map/vector_map/point.csv $(env SCENE)/map/vector_map/whiteline.csv $(env SCENE)/map/vector_map/area.csv $(env SCENE)/map/vector_map/idx.csv"/>
+
+</launch>

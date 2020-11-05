@@ -1,2 +1,0 @@
-radar_msgs:ros_sut
--DCATKIN_DEVEL_PREFIX=/metamoto/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/metamoto/catkin_ws/install -G Unix Makefiles

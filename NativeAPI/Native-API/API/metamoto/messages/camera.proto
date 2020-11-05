@@ -1,0 +1,29 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/image.proto";
+import "metamoto/types/camera_object.proto";
+
+// Data bus message published by cameras holding an image and/or list of detected objects.
+message Camera {
+  // An image
+  metamoto.types.Image image = 1;
+
+  // Object list
+  repeated metamoto.types.CameraObject objects = 2;
+  
+  // Intrinsics matrix (3x3 row-major).
+  // K = [fx  0 cx][ 0 fy cy][ 0  0  1].
+  // Projects 3D points in the camera coordinate frame to 2D pixel coordinates using
+  // the focal lengths (fx, fy) and principal point (cx, cy), all in pixel units.
+  repeated float K = 3;
+  
+  // Distortion params [k1, k2, t1, t2, k3]
+  repeated float D = 4;
+  
+  // Projection matrix (3x4 row-major)
+  repeated float P = 5;
+}

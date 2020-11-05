@@ -1,0 +1,204 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "google/protobuf/struct.proto";
+import "metamoto/types/asset.proto";
+import "metamoto/types/normal_distribution.proto";
+import "metamoto/types/pose.proto";
+import "metamoto/types/range.proto";
+import "metamoto/types/vehicle_instance.proto";
+import "metamoto/types/version.proto";
+
+
+// Represents a Controller or Sensor binary that runs outside of the Engine.
+message SystemUnderTest {
+  string host = 1;
+  int32 port = 2;
+
+  // Single container: docker image.
+  string image = 3;
+  // Command to run, broken up along spaces.
+  repeated string command = 4;
+
+  // These are used internally when Scenario.egoVehicles list is present.
+  repeated string hosts = 5;
+  repeated int32 ports = 6;
+
+  message Container {
+    string image = 1;
+    repeated string command = 2;
+  }
+  // This is used when there is more than one docker container to be launched.
+  repeated Container containers = 7;
+}
+
+// Represents a saved controller/binary configuration which can be placed on an EgoVehicle.
+message Controller { 
+  string id = 1;
+  string display_name = 2;  
+  string internal_name = 3;
+  bool read_only = 4; 
+  Version version = 5;
+  bool disabled = 6;
+
+  // If set, this will run outside of the Engine.
+  SystemUnderTest sut = 7;
+
+  // DataBus topics this Controller publishes.
+  repeated string publish_topics = 8;
+  NormalDistribution data_latency = 9;
+
+  google.protobuf.Struct parameters = 10;
+
+  // Each value in the Controller can instead be represented as a Range.
+  // See Scenario for description.
+  map<string, Range> ranges = 100;
+}
+
+// Represents a saved sensor configuration which can be placed on an EgoVehicle.
+message Sensor {
+  string id = 1;
+  string display_name = 2;
+  string internal_name = 3;
+  string prefab_name = 4;
+  string model_name = 17;
+  
+  bool read_only = 5;
+  Version version = 6;
+  bool disabled = 7;
+
+  // Pose of the Sensor in the EgoVehicle reference frame. Unset until placed on EgoVehicle.
+  Pose pose = 8;
+
+  // Optionally placed on SensorMount, otherwise empty.
+  string sensor_mount_id = 9;
+  string mount_point_id = 10;
+
+  // If set, this will run outside of the Engine.
+  SystemUnderTest sut = 11;
+
+  // DataBus topics this Sensor publishes.
+  repeated string publish_topics = 12;
+  NormalDistribution data_latency = 13;
+
+  google.protobuf.Struct parameters = 14;
+  
+  // Execution priority of this sensor for Initialize, Update and Close calls.
+  // Sensors with smaller priority number get executed first at a given time.
+  // Can be used when a sensor needs information from other sensors.
+  // By default, all Metamoto sensors (non-SUT) have a priority 0 except for the V2X sensor which has a priority 1.
+  // All SUT sensors have a priority 2, by default.
+  uint32 priority = 15;
+  
+  // Whether to write sensor data to disk (default true)
+  bool save_data = 16;
+
+  // Each value in the Sensor can instead be represented as a Range.
+  // See Scenario for description.
+  map<string, Range> ranges = 100;
+}
+
+// Represents a saved sensor mount configuration which can be placed on an EgoVehicle.
+message SensorMount {
+  string id = 1;
+  string display_name = 2;
+  string prefab_name = 3;
+  bool read_only = 4;
+
+  message MountPoint {
+    string id = 1;
+    enum Type {
+      UNKNOWN = 0;
+      OTHER = 1;
+      CAMERA = 2;
+      LIDAR = 3;
+      RADAR = 4;
+    }
+    Type type = 2;
+    // Pose of the mount point in the SensorMount's reference frame.
+    Pose pose = 3;
+  }
+  repeated MountPoint mount_points = 5;
+
+  // Pose of the SensorMount in the EgoVehicle reference frame. Unset until placed on EgoVehicle.
+  Pose pose = 6;
+
+  // Each value in the SensorMount can instead be represented as a Range.
+  // See Scenario for description.
+  map<string, Range> ranges = 100;
+}
+
+// Represents a saved vehicle dynamics configuration for controlling the dynamics of the ego vehicle outside of the Engine.
+message VehicleDynamics {
+  string id = 1;
+  string display_name = 2;  
+  string internal_name = 3;
+  bool read_only = 4; 
+  Version version = 5;
+  bool disabled = 6;
+
+  // This has to be set.
+  SystemUnderTest sut = 7;
+
+  google.protobuf.Struct parameters = 8;
+  
+  message ContactPatch {
+    enum Shape {
+      RECTANGLE = 0;
+      ELLIPSE = 1;
+    }
+    // Tire contact patch shape. Default is RECTANGLE
+    Shape shape = 1;
+    
+    // Tire contact length in meters (along vehicle forward). Default 0.1 meters.
+    float length = 2;
+    
+    // Tire contact width in meters. Default 0.2 meters.
+    float width = 3;
+    
+    // Number of sampling points between 1 and 100 (excluding 2, 3 and 4). Set to 1 (default) to get a single point contact.
+    // The first point will be on the center of the patch and the rest of them will be uniformly distributed along the edge(s).
+    // To have a uniformly distributed edge points along a rectangle patch, set this value to 1 + 4k where k is an integer.
+    int32 sampling_points = 4;
+    
+    // Averaging weight applied to the edge points. Between 0 and 1 (inclusive). Default 0.5.
+    // The weight of the center point is 1.
+    float edge_points_weight = 5;
+  }
+  // Represents how the vehicle dynamics code receives tire contact points and normals at Initialize and Update calls.
+  ContactPatch contact_patch = 9;
+
+  // Each value in the VehicleDynamics can instead be represented as a Range.
+  // See Scenario for description.
+  map<string, Range> ranges = 100;
+}
+
+// Represents a saved ego vehicle configuration.
+message EgoVehicle {
+  string id = 1;
+  string display_name = 2;
+  string model_name = 3;
+  bool read_only = 4;
+  Version version = 11;
+
+  VehicleInstance.Body body = 5;
+
+  repeated Controller controllers = 6;
+  repeated Sensor sensors = 7;
+
+  // Sensor poses may or may not match any of the mount points.
+  repeated SensorMount sensor_mounts = 8;
+  
+  // If set, the dynamics of the ego vehicle will be controlled outside of the Engine.
+  VehicleDynamics vehicle_dynamics = 9;
+
+  // List of assets used by the vehicle. Assets contain elements such as the vehicle and sensor prefabs.
+  repeated Asset assets = 10;
+
+  // Each value in the EgoVehicle can instead be represented as a Range.
+  // See Scenario for description.
+  map<string, Range> ranges = 100;
+}

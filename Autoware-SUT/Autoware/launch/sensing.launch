@@ -1,0 +1,19 @@
+<?xml version="1.0" standalone="no" ?>
+<launch>
+
+  <!-- calibration file path -->
+  <arg name="velodyne_calib" default="$(find velodyne_pointcloud)/params/32db.yaml"/>
+  <arg name="camera_calib" default="/metamoto/camera_calibration.yml"/>
+
+  <!-- HDL-32e -->
+  <include file="$(find runtime_manager)/launch_files/velodyne_hdl32e.launch">
+    <arg name="calibration" value="$(arg velodyne_calib)"/>
+  </include>
+
+  <include file="$(find points_preprocessor)/launch/ring_ground_filter.launch">
+    <arg name="point_topic" value="/points_raw"/>
+    <arg name="sensor_model" value="32"/>
+    <arg name="sensor_height" value="2.37"/>
+  </include>
+
+</launch>

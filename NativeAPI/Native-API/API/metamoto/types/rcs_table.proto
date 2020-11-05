@@ -1,0 +1,30 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/enumerations.proto";
+
+// Holds a table of radar cross section values at various azimuth and elevation angles for an object type.
+message RCSTable {
+  // The object type
+  ObjectType object_type = 1;
+
+  // The azimuth angles in radians
+  repeated float azimuth_angles = 2;
+
+  // The elevation angles in radians
+  repeated float elevation_angles = 3;
+
+  // The table of radar cross section values in meters^2. The size of the table should
+  // be the number of azimuth angles x the number of elevation angles. Values are indexed
+  // by azimuth angle then elevation angle.
+  repeated float rcs_values = 4;
+}
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/ego_vehicle.proto";
+import "metamoto/types/scenario.proto";
+import "metamoto/types/test_job.proto";
+
+
+message TestCase {
+  string id = 1;
+  string name = 2;
+
+  Scenario scenario = 3;
+  EgoVehicle ego_vehicle = 4;
+
+  repeated TestJob history = 5;
+
+  string test_manager_url = 6;
+}

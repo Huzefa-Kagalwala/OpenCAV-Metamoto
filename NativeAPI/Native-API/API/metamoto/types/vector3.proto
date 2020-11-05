@@ -1,0 +1,14 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+
+// Holds a 2D or 3D vector.  
+message Vector3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+

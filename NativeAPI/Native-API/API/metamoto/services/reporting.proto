@@ -1,0 +1,63 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.services;
+option csharp_namespace = "Metamoto.Services";
+
+import "metamoto/messages/log_message.proto";
+import "metamoto/messages/visualization.proto";
+import "metamoto/types/enumerations.proto";
+
+// Logging and reporting service for SUTs.
+service Reporting {
+  rpc AddTimeSeriesValue (ReportingAddTimeSeriesValueRequest) returns (ReportingAddTimeSeriesValueReply) {}
+  rpc Log (ReportingLogRequest) returns (ReportingLogReply) {}
+  rpc ReportEvent (ReportingReportEventRequest) returns (ReportingReportEventReply) {}
+  rpc Visualize (ReportingVisualizeRequest) returns (ReportingVisualizeReply) {}
+}
+
+message ReportingAddTimeSeriesValueRequest {
+  string name = 1;
+  string units = 2;
+  string description = 3;
+  double time = 4;
+  float value = 5;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 6;
+}
+
+message ReportingAddTimeSeriesValueReply {
+}
+
+message ReportingLogRequest {
+  metamoto.messages.LogMessage log_message = 1;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 2;
+}
+
+message ReportingLogReply {
+}
+
+message ReportingReportEventRequest {
+  double time = 1;
+  metamoto.types.Action action = 2;
+  string description = 3; 
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 4;
+}
+
+message ReportingReportEventReply {
+}
+
+message ReportingVisualizeRequest {
+  metamoto.messages.Visualization visualization = 1;
+  
+  // The ID of the ego vehicle sending the request. This parameter is required when a scenario uses multiple ego vehicles. The ego vehicle ID is sent to the SUT in initialize.
+  string ego_vehicle_id = 2;
+}
+
+message ReportingVisualizeReply {
+}

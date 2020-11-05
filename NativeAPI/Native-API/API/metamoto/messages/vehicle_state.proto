@@ -1,0 +1,71 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "metamoto/types/pose.proto";
+import "metamoto/types/roads.proto";
+import "metamoto/types/vehicle.proto";
+import "metamoto/types/velocity.proto";
+import "metamoto/types/acceleration.proto";
+
+// Data bus message published by the simulator containing ego vehicle state data.
+message VehicleState {
+  // Position and orientation of the vehicle (ground truth).
+  // The X and Z components of the position are center of the bounding box.
+  // The Y component is at the bottom of the bounding box.
+  metamoto.types.Pose pose = 1;
+
+  // Linear and angular velocity of the vehicle (ground truth).
+  metamoto.types.Velocity velocity = 2;
+
+  // Linear and angular acceleration of the vehicle (ground truth)
+  metamoto.types.Acceleration acceleration = 3; 
+  
+  // Position on the road network (ground truth). Multiple road points may be returned if
+  // the vehicle is in an intersection and on multiple, overlapping connecting
+  // roads.
+  repeated metamoto.types.RoadPoint road_point = 4;  
+
+  // Wheel angle (degrees, left is negative). 
+  float steer_angle = 5;
+  
+  // Throttle position (0 to 1).
+  float throttle = 6;
+
+  // Brake position (0 to 1).
+  float brake = 7;
+    
+  // Vehicle speed (m/s). Same as Euclidean norm of velocity.linear.
+  float speed = 8;
+  
+  // Gear selector.
+  metamoto.types.Vehicle.GearSelector gear_selector = 9;
+
+  // Engaged gear. Negative = reverse, 0 = Neutral (or Park), Positive = forward
+  int32 gear = 10;
+
+  // Engine RPM.
+  float rpm = 11;  
+
+  // Turn signal state.
+  metamoto.types.Vehicle.SignalLightState turn_signal = 12;
+  
+  // Head light state.
+  metamoto.types.Vehicle.LightState head_lights = 13; 
+  
+  message WheelState {
+    // Radians/s.
+    float angular_velocity = 1;
+
+    // Wheel angle in degrees (left is negative).
+    float steer_angle = 2;
+  }
+  // Order is left-to-right and front-to-back.
+  repeated WheelState wheels = 15;
+
+  // Any other state, e.g. corresponding to the "other_controls" in vehicle_controls.
+  repeated float other_state = 16;
+}
+

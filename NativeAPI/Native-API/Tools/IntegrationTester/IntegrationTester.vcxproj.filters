@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\generated">
+      <UniqueIdentifier>{3c1d43ee-fe62-4d28-a559-e85d24c6580d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\metamoto">
+      <UniqueIdentifier>{e4ab3c90-6861-46b5-af0a-53a924c98842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\metamoto\types">
+      <UniqueIdentifier>{64a909c4-7f0d-4586-a214-856350f71f6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\metamoto\services">
+      <UniqueIdentifier>{c64f57c7-0bd0-4c64-abb0-44a6af5a42c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\metamoto\messages">
+      <UniqueIdentifier>{ea57d97b-5ea1-4920-9ddb-9f6e6d0abffe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="controller_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data_bus_service.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sensor_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="controller_client.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data_bus_service.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sensor_client.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\acceleration.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\camera_object.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\enumerations.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\environment.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\image.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\laser_return.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\laser_return_group.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\normal_distribution.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\pedestrian.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\pose.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\quaternion.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\radar_object.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\result_metadata.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\roads.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\service_description.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\shape.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\traffic_light.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\traffic_sign.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\vector3.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\vehicle.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\velocity.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\waypoint.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\controller.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\controller.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\data_bus.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\data_bus.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\image_renderer.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\image_renderer.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\map.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\map.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\ray_tracer.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\ray_tracer.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\sensor.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\sensor.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\camera.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\data_bus_message.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\gps.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\ground_truth.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\imu.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\lidar.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\localizer.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\radar.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\vehicle_controls.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\vehicle_state.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\log_message.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\sut_connector.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\sut_connector.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\reporting.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\reporting.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\bounding_box.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\status.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\vehicle_info.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\asset.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\ego_vehicle.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\geo_coordinates.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\pedestrian_library.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\range.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\scenario.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\test_case.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\test_job.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\test_run.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\test_suite.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\test_vector.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\vehicle_instance.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\visual_path.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\visualization.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\messages\v2x.pb.cc">
+      <Filter>Source Files\generated\metamoto\messages</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\vehicle_dynamics.grpc.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\services\vehicle_dynamics.pb.cc">
+      <Filter>Source Files\generated\metamoto\services</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\metamoto\types\test_result.pb.cc">
+      <Filter>Source Files\generated\metamoto\types</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

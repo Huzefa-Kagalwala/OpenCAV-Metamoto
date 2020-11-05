@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataConversion", "DataConversion.vcxproj", "{1208AFE1-6DB2-46C5-BE41-1900258CAB06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1208AFE1-6DB2-46C5-BE41-1900258CAB06}.Debug|x64.ActiveCfg = Debug|x64
+		{1208AFE1-6DB2-46C5-BE41-1900258CAB06}.Debug|x64.Build.0 = Debug|x64
+		{1208AFE1-6DB2-46C5-BE41-1900258CAB06}.Release|x64.ActiveCfg = Release|x64
+		{1208AFE1-6DB2-46C5-BE41-1900258CAB06}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {96159F40-1E4E-40CC-A624-537F7F7F4CCA}
+	EndGlobalSection
+EndGlobal

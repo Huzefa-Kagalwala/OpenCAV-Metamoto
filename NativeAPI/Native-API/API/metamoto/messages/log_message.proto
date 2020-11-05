@@ -1,0 +1,25 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+
+message LogMessage {
+  enum Level {
+    LEVEL_UNKNOWN = 0;
+    LEVEL_ERROR = 1;
+    LEVEL_WARNING = 2;
+    LEVEL_INFO = 3;
+    LEVEL_TRACE = 4;
+  }
+
+  double time = 1;
+  Level level = 2;
+  string class_name = 3;
+  string method = 4;
+  int32 line_number = 5;
+  string message = 6;    
+  float real_time = 7; 
+  string filename = 8;
+}

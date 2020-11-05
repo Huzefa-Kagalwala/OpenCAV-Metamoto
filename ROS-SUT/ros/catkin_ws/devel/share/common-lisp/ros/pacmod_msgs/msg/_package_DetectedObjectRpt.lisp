@@ -1,8 +1,0 @@
-(cl:in-package pacmod_msgs-msg)
-(cl:export '(HEADER-VAL
-          HEADER
-          FRONT_OBJECT_DISTANCE_LOW_RES-VAL
-          FRONT_OBJECT_DISTANCE_LOW_RES
-          FRONT_OBJECT_DISTANCE_HIGH_RES-VAL
-          FRONT_OBJECT_DISTANCE_HIGH_RES
-))

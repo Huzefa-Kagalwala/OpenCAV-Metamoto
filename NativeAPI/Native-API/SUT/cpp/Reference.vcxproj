@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{5F2717C6-9602-4E85-9701-74D83C69ABCD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>generated;%GRPC_HOME%\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>true</SDLCheck>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;libprotobuf.lib;gpr.lib;grpc_unsecure.lib;grpc++_unsecure.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%GRPC_HOME%\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="controller_service.cc" />
+    <ClCompile Include="data_bus_client.cc" />
+    <ClCompile Include="generated\metamoto\messages\camera.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\data_bus_message.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\gps.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\ground_truth.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\imu.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\lidar.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\localizer.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\log_message.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\radar.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\vehicle_controls.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\vehicle_state.pb.cc" />
+    <ClCompile Include="generated\metamoto\messages\visualization.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\controller.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\controller.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\data_bus.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\data_bus.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\image_renderer.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\image_renderer.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\map.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\map.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\ray_tracer.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\ray_tracer.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\reporting.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\reporting.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\sensor.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\sensor.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\sut_connector.grpc.pb.cc" />
+    <ClCompile Include="generated\metamoto\services\sut_connector.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\acceleration.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\bounding_box.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\camera_object.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\ego_vehicle.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\enumerations.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\environment.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\geo_coordinates.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\image.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\laser_return.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\laser_return_group.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\normal_distribution.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\pedestrian.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\pedestrian_library.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\pose.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\quaternion.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\radar_object.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\range.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\result_metadata.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\roads.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\scenario.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\service_description.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\shape.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\status.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\test_case.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\test_job.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\test_result.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\test_run.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\test_suite.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\test_vector.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\traffic_light.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\traffic_sign.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\vector3.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\vehicle.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\vehicle_info.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\vehicle_instance.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\velocity.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\visual_path.pb.cc" />
+    <ClCompile Include="generated\metamoto\types\waypoint.pb.cc" />
+    <ClCompile Include="reporting_client.cc" />
+    <ClCompile Include="sensor_parameters.cpp" />
+    <ClCompile Include="sensor_service.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="controller_service.h" />
+    <ClInclude Include="data_bus_client.h" />
+    <ClInclude Include="reporting_client.h" />
+    <ClInclude Include="sensor_parameters.h" />
+    <ClInclude Include="sensor_service.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

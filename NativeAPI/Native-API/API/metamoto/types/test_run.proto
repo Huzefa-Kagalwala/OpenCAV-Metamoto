@@ -1,0 +1,30 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/test_result.proto";
+import "metamoto/types/test_job.proto";
+
+
+message TestRun {
+  string id = 1;
+  string test_suite_id = 2;
+  string test_suite_name = 3;
+  string start_time = 4;
+  string end_time = 5;
+  TestResult.Status status = 6;
+  string result_text = 7;
+  int32 num_passed = 8;
+  int32 num_failed = 9;
+  int32 num_stopped = 10;
+  int32 num_errored = 11;
+  int32 num_running = 12;
+  int32 num_pending = 13;
+  float compute_time = 14;
+  string started_by = 15;
+  float progress = 16;
+
+  repeated TestJob test_jobs = 17;
+}

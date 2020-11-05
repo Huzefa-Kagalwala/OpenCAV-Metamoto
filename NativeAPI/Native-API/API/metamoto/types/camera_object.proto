@@ -1,0 +1,42 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/acceleration.proto";
+import "metamoto/types/enumerations.proto";
+import "metamoto/types/pose.proto";
+import "metamoto/types/shape.proto";
+import "metamoto/types/velocity.proto";
+
+message CameraObject {
+  // The object ID (ground truth)
+  uint32 object_id = 1;
+  
+  // The object type (ground truth)
+  ObjectType object_type = 2;
+    
+  // Indicates the reference frame of the pose and velocity
+  ReferenceFrame reference_frame = 3;
+  
+  // Pose of object
+  Pose pose = 4;
+  
+  // Velocity of object
+  Velocity velocity = 5;
+  
+  // Acceleration of object
+  Acceleration acceleration = 6;
+
+  // Shape of object
+  Shape shape = 7;  
+  
+  // Pixel bounding box.  Image origin is lower left.
+  uint32 x_lower_left = 8;
+  uint32 y_lower_left = 9;
+  uint32 x_upper_right = 10;
+  uint32 y_upper_right = 11;
+
+  uint32 pixel_count = 12;
+}

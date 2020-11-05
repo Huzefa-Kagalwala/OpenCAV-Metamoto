@@ -1,0 +1,46 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/pose.proto";
+import "metamoto/types/shape.proto";
+
+// Represents a traffic sign.
+message TrafficSign {
+  // Object ID of the traffic sign.
+  string id = 1;
+  
+  // Signal ID in the road network.
+  string signal_id = 2;  
+
+  // Position and orientation in world coordinates.  
+  Pose pose = 3;  
+  
+  // Shape containing the traffic sign (sign only).
+  Shape shape = 4;
+
+  Type type = 5;
+  
+  // Value associated with sign, if applicable (e.g. speed limit).
+  float value = 6;
+    
+  enum Type {
+    UNKNOWN = 0;
+    OTHER = 1;
+    STOP = 2;
+    YIELD = 3;
+    DO_NOT_ENTER = 4;
+    NO_LEFT_TURN = 5;
+    NO_RIGHT_TURN = 6;
+    NO_U_TURN = 7;
+    NO_LEFT_OR_U_TURN = 8;
+    ONE_WAY = 9;
+    SPEED_LIMIT = 10;
+    NO_TRUCKS = 11;
+    NO_PEDESTRIANS = 12;
+    NO_BICYCLES = 13;
+    NO_PARKING = 14;
+  }
+}

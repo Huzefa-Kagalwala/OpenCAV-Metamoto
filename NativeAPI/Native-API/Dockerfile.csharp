@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
+
+WORKDIR /metamoto
+
+# Copy SUT and restore as distinct layers
+COPY SUT/csharp SUT/csharp
+RUN cd SUT/csharp && dotnet restore
+
+# Copy API
+COPY API API
+
+RUN ln -s /root/.nuget/packages/grpc.tools/*/tools/linux_x64/protoc /usr/local/bin/protoc && \
+    ln -s /root/.nuget/packages/grpc.tools/*/tools/linux_x64/grpc_csharp_plugin /usr/local/bin/grpc_csharp_plugin && \
+    API/build/compile-protos.sh /metamoto/SUT/csharp/generated csharp 1
+RUN cd SUT/csharp && dotnet publish -c Release -o out
+
+# Build runtime image
+FROM microsoft/dotnet:aspnetcore-runtime
+WORKDIR /metamoto
+COPY --from=build-env /metamoto/SUT/csharp/out .
+
+# Run commands on container launch here
+# CMD dotnet CSharpSUTs.dll

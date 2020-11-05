@@ -1,8 +1,0 @@
-prefix=/metamoto/catkin_ws/install
-
-Name: gps_msgs
-Description: Description of gps_msgs
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: 

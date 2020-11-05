@@ -1,0 +1,76 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/enumerations.proto";
+
+/* Holds the return information for a single object tracked by a radar. 
+ * The object position can be found with either the (range, angle) or (position_x, position_z) information.
+ * They both point to the same point in space which is the center-point of the closer arc of the annulus sector
+ * made by two angles and two radii. The two angles are "angle plus/minus 0.5 * width / range" and the two radii
+ * are "range" and "range + length", where "width" is the arc length of the closer arc and "length" is the length 
+ * of the annulus sector along radius.*/
+message RadarObject {
+  enum Status {
+    STATUS_UNKNOWN = 0;
+    STATUS_NEW_OBJECT = 1;
+    STATUS_UPDATED = 2;
+    STATUS_NOT_UPDATED = 3;
+  }
+
+  // The ID assigned to this object.
+  uint32 internal_id = 1;
+  
+  // The object ID (ground truth). 
+  // This value will be zero for false alarm detections and greater than zero for true detections.
+  uint32 object_id = 2;
+  
+  // The object type (ground truth)
+  ObjectType object_type = 3;
+   
+  // The status of the object.
+  Status status = 4;
+  
+  // Range from the radar to the object in meters.
+  float range = 5;
+  
+  // The velocity of the object in the direction of the radar in m/s.
+  float range_rate = 6;
+  
+  // The acceleration of the object in the direction of the radar in m/s^2.
+  float range_acceleration = 7;
+  
+  // The direction of the object from the radar in degrees (counter-clockwise positive).
+  float angle = 8;
+  
+  // The object width (along the azimuth) in meters.
+  float width = 9;
+  
+  // The object length (along radius) in meters
+  float length = 10;
+  
+  // The x position (right distance) of the object in m.  
+  float position_x = 11;
+  
+  // The z position (forward distance) of the object in m.  
+  float position_z = 12;
+  
+  // The right velocity of the object in m/s.
+  float velocity_x = 13;
+  
+  // The forward velocity of the object in m/s.
+  float velocity_z = 14;
+  
+  // The forward acceleration of the object in m/s^2.
+  float acceleration_z = 15; 
+  
+  // The radar cross section (RCS) in dbsm
+  float rcs = 16;
+  
+  // The signal-to-noise ratio in db
+  float snr = 17;
+}
+
+

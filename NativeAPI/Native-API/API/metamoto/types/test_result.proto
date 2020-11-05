@@ -1,0 +1,113 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.types;
+option csharp_namespace = "Metamoto.Types";
+
+import "metamoto/types/asset.proto";
+import "metamoto/types/ego_vehicle.proto";
+import "metamoto/types/pose.proto";
+import "metamoto/types/result_metadata.proto";
+import "metamoto/types/vehicle_instance.proto";
+
+
+message TestResult {
+  enum Status {
+    UNKNOWN = 0;
+    OTHER = 1;
+    PASS = 2;
+    FAIL = 3;
+    STOP = 4;
+    ERROR = 5;
+    PENDING = 6;
+    RUNNING = 7;
+    STOPPING = 8;
+    POST_PROCESSING = 9;
+  }
+
+  string name = 1;
+  string timestamp = 2;
+  string test_engine_version = 3;
+
+  message Result {
+    Status status = 1;
+    string reason = 2;
+  }
+  Result result = 4;
+
+  message Statistics {
+    float simulation_time = 1;
+    float real_time = 2;
+    float render_frame_rate = 3;
+    float physics_frame_rate = 4;
+  }
+  Statistics statistics = 5;
+
+  message DataBusTopic {
+    string name = 1;
+    string message_file = 2;
+  }
+  
+  // Deprecated. Use topics field in Vehicle.
+  repeated DataBusTopic topics = 6;
+
+  string test_case_file = 7;
+  string log_file = 8;
+  string intersection_series_log_file = 9;
+  string transforms_directory = 10;
+  string data_streams_directory = 11;
+  string final_views_directory = 12;
+  string data_bus_directory = 13;
+
+  message Vehicle {
+    VehicleInstance instance = 1;
+    string transforms_file = 2;
+
+    Pose pose = 3;
+
+    message Binary {
+      oneof type_oneof {
+        Controller controller = 1;
+        Sensor sensor = 2;
+      }
+
+      string results_directory = 3;
+      repeated ResultMetadata results_data = 4;
+    }
+    repeated Binary binaries = 4;
+    repeated SensorMount sensor_mounts = 5;
+    
+    string id = 6;
+    string results_directory = 7;
+    repeated DataBusTopic topics = 8;
+    repeated DataStream data_streams = 9;
+    string visualizations_file = 10;
+  }
+
+  // Deprecated. Use ego_vehicles field.
+  Vehicle ego_vehicle = 14;
+
+  repeated Vehicle vehicles = 15;
+
+  message Pedestrian {
+    string name = 1;
+    string transforms_file = 2;
+  }
+  repeated Pedestrian pedestrians = 16;
+
+  repeated string final_view_files = 17;
+
+  message DataStream {
+    string name = 1;
+    string description = 2;
+    string units = 3;
+    string filename = 4;
+  }
+  
+  repeated DataStream data_streams = 18;
+
+  // Must include specific versions.
+  repeated Asset assets = 19;
+  
+  repeated Vehicle ego_vehicles = 20;
+}

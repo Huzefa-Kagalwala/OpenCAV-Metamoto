@@ -1,0 +1,1 @@
+GAZEBO_MODEL_PATH=~/environment/simulation_ws/src/aws_robomaker-hospital-world/models:~/environment/simulation_ws/src/aws_robomaker-hospital-world/fuel_models

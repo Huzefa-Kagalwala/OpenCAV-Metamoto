@@ -1,0 +1,10 @@
+# mostly copied from util/packages/runtime_manager/scripts/setup.yaml
+use_sim_time: true
+tf_x: 1.2
+tf_y: 0.0
+tf_z: 1.74
+tf_yaw: 0.0
+tf_pitch: 0.0
+tf_roll: 0.0
+localizer: velodyne
+

@@ -1,0 +1,57 @@
+# First the python dependencies for Getting Started
+# Start with tensorflow docker for python developer
+FROM tensorflow/tensorflow:1.13.2-py3
+
+RUN apt-get update && apt-get upgrade -y
+
+# Install ffmpeg and packages
+RUN apt-get install -y ffmpeg vim
+RUN pip3 install numpy matplotlib pillow grpcio==1.18.0 grpcio-tools==1.18.0
+
+
+# C++ dependencies
+# Most of it from: https://hub.docker.com/r/grpc/cxx/~/dockerfile/
+
+RUN apt-get update -y && apt-get install -y \
+  build-essential autoconf git pkg-config automake libtool curl \
+  libcurl4-openssl-dev g++ unzip libssl-dev libeigen3-dev \
+  && apt-get clean
+
+# Protobuf & gRpc
+ENV GRPC_RELEASE_TAG v1.18.x
+RUN git clone -b ${GRPC_RELEASE_TAG} https://github.com/grpc/grpc /var/local/git/grpc && \
+		cd /var/local/git/grpc && \
+    git submodule update --init --recursive && \
+    echo "--- installing protobuf ---" && \
+    cd third_party/protobuf && \
+    ./autogen.sh && ./configure --enable-shared && \
+    make -j$(nproc) && make -j$(nproc) check && make install && make clean && ldconfig && \
+    echo "--- installing grpc ---" && \
+    cd /var/local/git/grpc && \
+    make -j$(nproc) && make install && make clean && ldconfig
+
+
+# Metamoto specific
+WORKDIR /metamoto
+
+# Copy the API, SUT and Tools directories
+COPY API API
+COPY SUT/cpp SUT/cpp
+COPY SUT/csharp SUT/csharp
+COPY SUT/python SUT/python
+COPY Tools Tools
+
+# Build the python API classes
+RUN cd SUT/python && make clean && make
+
+# Make py file executable
+RUN chmod +x SUT/python/vehicle_detector.py
+
+# Build the cpp SUT
+RUN cd SUT/cpp && make clean && make
+
+# Build Tools
+RUN cd Tools/IntegrationTester && make clean && make
+RUN cd Tools/SUTConnector && make clean && make
+RUN cd Tools/DataConversion/cpp && make clean && make
+RUN cd Tools/DataConversion/python && make clean && make

@@ -1,0 +1,47 @@
+// Copyright (c) 2018-2020 Metamoto, Inc. All Rights Reserved.
+
+syntax = "proto3";
+package metamoto.messages;
+option csharp_namespace = "Metamoto.Messages";
+
+import "google/protobuf/wrappers.proto";
+import "metamoto/types/vehicle.proto";
+
+// Data bus message used to set the vehicle controls.
+message VehicleControls {
+  // Sets the wheel angle (-1 to 1, left is negative). 
+  // This is in terms of the VehicleInfo.max_steer_angle.
+  google.protobuf.FloatValue steer = 1;
+  
+  // Sets the throttle position (0 to 1).
+  google.protobuf.FloatValue throttle = 2;
+
+  // Sets the brake position (0 to 1).
+  google.protobuf.FloatValue brake = 3;
+  
+  // Gear selector and gear are not guaranteed to take effect.
+  metamoto.types.Vehicle.GearSelector gear_selector = 4;
+  
+  int32 gear = 9;
+
+  metamoto.types.Vehicle.SignalLightState turn_signal = 5;
+  
+  metamoto.types.Vehicle.LightState head_lights = 6;  
+
+  // Use a PID Controller to set the throttle and brake from acceleration.
+  // Takes precedence over above throttle and brake.
+  google.protobuf.FloatValue acceleration = 7;
+  
+  message WheelControl {
+    // Radians/s.
+    google.protobuf.FloatValue angular_velocity = 1;
+
+    // Wheel angle in degrees (left is negative).
+    google.protobuf.FloatValue steer_angle = 2;
+  }
+  // Order is left-to-right and front-to-back.
+  repeated WheelControl wheel_controls = 8; 
+
+  // Any other control signals. 
+  repeated float other_controls = 10;
+}
